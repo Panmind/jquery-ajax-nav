@@ -176,9 +176,6 @@ $.location = new (function () { // Inline object creation and initialization
    * @return undefined
    */
   this.__save = function () { // Private
-    if (URI) // Already set.
-      return;
-
     var href = document.location.href;
 
     URI     = href.replace (/#.*$/, ''); /// XXX move these into the schema
