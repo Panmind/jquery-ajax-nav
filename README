@@ -1,0 +1,12 @@
+
+jQuery AJAX Navigation framework (C) 2009 Exelab s.n.c.
+
+Tutorial documentation is a work in progress, for now,
+please have a look at the reference documentation in
+the sources.
+
+  jquery.location.js - Document location handling
+  jquery.ajax-nav.js - AJAX Navigation framework
+
+  - vjt  Tue Nov 17 14:18:22 CET 2009
+
