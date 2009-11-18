@@ -1,12 +1,31 @@
+jQuery AJAX Navigation framework
+================================
 
-jQuery AJAX Navigation framework (C) 2009 Exelab s.n.c.
+ (C) 2009 Exelab s.n.c.
 
-Tutorial documentation is a work in progress, for now,
-please have a look at the reference documentation in
-the sources.
+Tutorial documentation is a work in progress. In the
+meantime, have a look at the reference documentation
+in the source files.
 
-  jquery.location.js - Document location handling
-  jquery.ajax-nav.js - AJAX Navigation framework
+Core
+----
 
-  - vjt  Tue Nov 17 14:18:22 CET 2009
+  * jquery.history.js  - jQuery history management
+  * jquery.location.js - Document location handling
+  * jquery.ajax-nav.js - AJAX navigation framework
+
+Extras
+------
+
+  * jquery.behaviours.js - Generic behaviours library
+  * jquery.log.js        - Small $.log helper
+
+Authors
+-------
+
+  * Marcello Barnaba  <marcello.barnaba@exelab.eu>
+  * Ferdinando de Meo <ferdinando.demeo@exelab.eu>
+  * Exelab Karma      <exelab@exelab.eu>
+
+  - vjt  Thu Nov 19 00:03:37 CET 2009
 
