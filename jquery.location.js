@@ -77,11 +77,14 @@ $.location = new (function () { // Inline object creation and initialization
    *
    * @param String href: the href to be set as an anchor.
    *
-   * @return undefined
+   * @return the anchor that was set
    */
   this.setAnchor = function (href) {
-    if (!href)
-      href = '/';
+    // If the href is empty or doesn't start with a /,
+    // add it cleverly.
+    //
+    if (!/^\//.test (href))
+      href = '/' + (href || '');
 
     var anchor = href
       .replace (/^\//, '#')
@@ -89,6 +92,8 @@ $.location = new (function () { // Inline object creation and initialization
       .replace (/\&/,  ';');
 
     this.set (URI + anchor);
+
+    return anchor;
   };
 
   /**

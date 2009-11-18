@@ -254,8 +254,7 @@ $.navLoadContent = function (loader, options) {
         if (method == 'get') {
           var anchor = options.href.replace (options.base, '');
           // $.log ("Updating anchor to " + anchor);
-          __historyCurrent = anchor;
-          $.location.setAnchor ('/' + anchor);
+          __historyCurrent = $.location.setAnchor (anchor).replace (/^#/, '');
         }
 
         __invoke ('success', options, loader)
