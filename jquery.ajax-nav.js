@@ -179,6 +179,14 @@ $.navLoadContent = function (loader, options) {
   var method = (options.method || 'get').toLowerCase ();
   var response = null, error = null;
 
+  // Uhm. This could be heavy, and should be moved into a separate function
+  // called by both navForm () and navLink ().
+  //
+  if (options.container.length == 0) {
+    $.log ('AJAX nav: reloading container ' + options.container.selector);
+    options.container = $(options.container.selector);
+  }
+
   // Let's begin the party...
   //
   $.ajax ({
