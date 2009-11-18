@@ -84,7 +84,13 @@
  *  - live:      Boolean (optional, default: true)
  *               if true, the behaviour is attached using jQuery's
  *               .live (), so that new elements that appear on the
- *               page inherit the AJAX load behaviour
+ *               page inherit the AJAX load behaviour.
+ *
+ *  - noEvents:  Boolean (optional, default: false)
+ *               if true, no pm:contentLoaded event is triggered
+ *               upon load completion. Useful for light actions
+ *               that alter just a single, isolated element of
+ *               the page.
  *
  *  - loading:   Function (optional)
  *               a callback fired when loading starts.
@@ -247,7 +253,8 @@ $.navLoadContent = function (loader, options) {
         __invoke ('success', options, loader)
 
         // $.log ('triggering pm:contentLoaded');
-        $(document).trigger ('pm:contentLoaded');
+        if (!options.noEvents)
+          $(document).trigger ('pm:contentLoaded');
 
         options.container.opaque ();
       } else if (error) {
