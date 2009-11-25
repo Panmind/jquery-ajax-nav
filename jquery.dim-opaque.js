@@ -108,8 +108,6 @@ $.fn.dim = function () {
  * Returns jQuery.
  */
 $.fn.opaque = function () {
-  var element = $(this);
-
   disabler.hide ();
   disabler.css (disablerCSS);
 
