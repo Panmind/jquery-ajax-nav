@@ -183,7 +183,7 @@ $.navLoadContent = function (loader, options) {
   // called by both navForm () and navLink ().
   //
   if (options.container.length == 0) {
-    $.log ('AJAX nav: reloading container ' + options.container.selector);
+    // $.log ('AJAX nav: reloading container ' + options.container.selector);
     options.container = $(options.container.selector);
   }
 
@@ -201,8 +201,8 @@ $.navLoadContent = function (loader, options) {
 
       __invoke ('loading', options, loader);
 
-      if (typeof (options.toSource) == 'function')
-        $.log ('loading ' + options.href + '(' + options.toSource () + ')');
+      // if (typeof (options.toSource) == 'function')
+        // $.log ('loading ' + options.href + '(' + options.toSource () + ')');
     },
 
     // YAY! Save the response for further processing
@@ -229,13 +229,11 @@ $.navLoadContent = function (loader, options) {
     // Let's end the party...
     //
     complete: function (xhr, textStatus) {
-      $.log ("received a " + xhr.status);
-
       if (xhr.status == 202) {
         // OK, not quite yet: this is a redirect that'll start
         // another AJAX-party...
         //
-        $.log ("202-redirecting to '" + response + "'");
+        // $.log ("202-redirecting to '" + response + "'");
 
         options.href   = response;
         options.method = 'get';
@@ -382,12 +380,12 @@ $.navInit = function () {
     );
 
   $.navDefaultOptions.base = base;
-  $.log ('AJAX nav init: set base to "' + base + "'");
+  // $.log ('AJAX nav init: set base to "' + base + "'");
 
   // Initialize the jquery.history plugin
   //
   $.historyInit (__historyChange);
-  $.log ('AJAX nav init: history initialized');
+  // $.log ('AJAX nav init: history initialized');
 
   // Initialize the default target container
   //
@@ -397,15 +395,15 @@ $.navInit = function () {
   if (!$.navDefaultOptions.container)
     throw ('BUG: container "' + container + '" not found in the DOM');
 
-  $.log ('AJAX nav init: found the "' + container + '" container');
+  // $.log ('AJAX nav init: found the "' + container + '" container');
 
   // Load the anchor currently in the URL bar
   //
   var anchor = $.location.getAnchors ();
-  $.log ('AJAX nav init: navigating to "' + anchor + '"');
+  // $.log ('AJAX nav init: navigating to "' + anchor + '"');
   $.navHistoryLoad (anchor);
 
-  $.log ('AJAX navigation initialized and ready to roll');
+  // $.log ('AJAX navigation initialized and ready to roll');
 };
 
 /**
@@ -499,10 +497,10 @@ var __historyLoad = function (anchor) {
   var path    = $.location.getAnchorPath (anchor);
   var params  = $.location.getAnchorParams (anchor);
 
-  $.log (
-    'AJAX history: loading #' + anchor +
-    ' path['+path+'] params['+params+']'
-  );
+  //$.log (
+  //  'AJAX history: loading #' + anchor +
+  //  ' path['+path+'] params['+params+']'
+  //);
 
   $.navLoadContent (window, {
     base     : $.navDefaultOptions.base,
