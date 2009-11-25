@@ -151,9 +151,10 @@ $('.deleter').live ('click', function () {
     deleter.trigger ('deleted');
 
     if (deleter.fader ()) {
-      deletee.fadeOut (speed, function () { deletee.remove (); });
+      deletee.fadeOut (speed, function () { deletee.remove (); deletee.opaque (); });
     } else {
       deletee.remove ();
+      deletee.opaque ();
     }
   });
 
