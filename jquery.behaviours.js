@@ -158,17 +158,26 @@ $('.asker').live ('click', function () {
 });
 
 // The deleter
+/* Example usage of the `deleted` event:
+ *
+ *  // Remove the tag editor in show when all tags are removed
+ *  $('.tagEditor .deleter').live ('deleted', function (event) {
+ *    var deletee   = event.deletee[0];
+ *    var labels    = event.deletee.siblings ();
+ *    var tagEditor = event.deletee.parents ('.entryContent');
+ *    var remaining = labels.filter (function () { return this != deletee; });
+ *
+ *    if (remaining.length == 0)
+ *      tagEditor.slideUp (function () { tagEditor.remove () });
+ *  });
+ */
 $('.deleter').live ('click', function () {
   var deleter  = $(this);
   var href     = deleter.attr ('href');
   var selector = deleter.attr ('rel');
 
-  // if the rel attribute is not set ask for confirm
-  // and follow the link
-  if(!selector) {
-    msg = deleter.attr ('title');
-    return confirm (msg);
-  }
+  if (!selector)
+    $.behaviourError (this, 'no "rel" attribute definite on the deleter!');
 
   // Animation speed
   var speed   = 'fast';
@@ -176,15 +185,19 @@ $('.deleter').live ('click', function () {
 
   deletee.dim ();
 
-  $.post (href, {'_method': 'delete'}, function (data, textStatus) {
-    deleter.trigger ('deleted');
+  var remove  = function () {
+    deleter.trigger ({type: 'deleted', deletee: deletee});
+    deletee.remove ();
+    deletee.opaque ();
+  };
 
-    if (deleter.fader ()) {
-      deletee.fadeOut (speed, function () { deletee.remove (); deletee.opaque (); });
-    } else {
-      deletee.remove ();
-      deletee.opaque ();
-    }
+  $.post (href, {'_method': 'delete'}, function (data, textStatus) {
+
+    if (deleter.fader ())
+      deletee.fadeOut (speed, remove);
+    else
+      remove ();
+
   });
 
   return false;
