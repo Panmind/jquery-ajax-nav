@@ -8,9 +8,13 @@
  * The public API are the .navLink () and .navForm () methods, that
  * attach to the matched jQuery elements the AJAX loading behaviour.
  *
- * When the content is loaded, a custom "pm:contentLoaded" event is
- * triggered on the whole document: this equals to jQuery's .ready ()
- * event.
+ * When the content starts loading, a custom "pm:contentUnloading"
+ * event is triggered on the whole document, unless this is the
+ * first page load (as determined by history).
+ *
+ * When the content is loaded, another custom "pm:contentLoaded"
+ * event is triggered on the whole document, again: conceptually
+ * equivalent to jQuery's .ready () event.
  *
  * To optimize loading, listeners that can be bound using .live ()
  * SHOULD be initialized into a
@@ -21,6 +25,11 @@
  * the mouseenter/mouseleave events) MUST be initialized into a
  *
  *   $(document).bind ('pm:contentLoaded', function () { ... });
+ *
+ * listeners that do clean-ups of the page, stop timers, etc, MUST
+ * be initialized into a
+ *
+ *   $(document).bind ('pm:contentUnloading', function () { ... });
  *
  * navLink ()/navForm () are bound using .live () by default.
  *
@@ -94,7 +103,8 @@
  *
  *  - noEvents:  Boolean (optional, default: false)
  *               if true, no pm:contentLoaded event is triggered
- *               upon load completion. Useful for light actions
+ *               upon load completion nor a pm:contentUnloading is
+ *               fired when loading start. Useful for light actions
  *               that alter just a single, isolated element of
  *               the page.
  *
@@ -203,10 +213,16 @@ $.navLoadContent = function (loader, options) {
     url    : options.href,
     data   : options.params,
 
-    // Dim the container, trigger the `loading` and log debug details
-    // to the console
+    // Dim the container, trigger pm:contentUnloading on the document,
+    // call the `loading` callback and log debug details to the console
+    //
     beforeSend: function (xhr) {
       options.container.dim ();
+
+      if (__historyCurrent && !options.noEvents) {
+        // $.log ('triggering pm:contentUnloading');
+        $(document).trigger ('pm:contentUnloading');
+      }
 
       __invoke ('loading', options, loader);
 
@@ -269,9 +285,10 @@ $.navLoadContent = function (loader, options) {
 
         __invoke ('success', options, loader)
 
-        // $.log ('triggering pm:contentLoaded');
-        if (!options.noEvents)
+        if (!options.noEvents) {
+          // $.log ('triggering pm:contentLoaded');
           $(document).trigger ('pm:contentLoaded');
+        }
 
         options.container.opaque ();
       } else if (error) {
