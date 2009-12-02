@@ -129,12 +129,22 @@ $('.toggler').live ('click', function () {
 
 // The asker
 $('.asker').live ('click', function () {
-  var question = $(this).attr ('title');
+  var asker    = $(this);
+  var question = asker.attr ('title');
 
   if (!question)
     $.behaviourError (this, 'no "title" attribute defined on the asker!');
 
-  return confirm (question);
+  if (!asker.hasClass ('deleter'))
+    return confirm (question);
+
+  var deletee = asker.hierarchyFind (asker.attr ('rel'));
+
+  deletee.dim ();
+  returning (confirm (question), function (confirmation) {
+    if (!confirmation)
+      deletee.opaque ();
+  });
 });
 
 // The deleter
