@@ -266,3 +266,24 @@ $('.swapper').live ('click', function () {
 
   return false;
 });
+
+// Checks or unchecks a bunch of checkboxes
+//
+$.fn.check = function () {
+  var flag = arguments.length ? arguments[0] : true;
+  return $(this).attr ('checked', flag);
+};
+
+// The selecter: selects a bunch of checkboxes, passed via rel, and checks them.
+//
+$('.selecter').live ('click', function () {
+  var selector = $(this).attr('rel');
+  $(selector + ':checkbox').check ();
+  return false;
+});
+
+$('.deselecter').live ('click', function () {
+  var selector = $(this).attr('rel');
+  $(selector + ':checkbox').check (false);
+  return false;
+});
