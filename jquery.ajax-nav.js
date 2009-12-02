@@ -98,6 +98,9 @@
  *               that alter just a single, isolated element of
  *               the page.
  *
+ *  - noHistory: Boolean (optional, default: false)
+ *               do not alter history after a successful load.
+ *
  *  - loading:   Function (optional)
  *               a callback fired when loading starts.
  *               Inside the callback, "this" is set to the HTML
@@ -258,7 +261,7 @@ $.navLoadContent = function (loader, options) {
         else
           options.container.html (response);
 
-        if (method == 'get') {
+        if (method == 'get' && !options.noHistory) {
           var anchor = options.href.replace (options.base, '');
           // $.log ("Updating anchor to " + anchor);
           __historyCurrent = $.location.setAnchor (anchor).replace (/^#/, '');
