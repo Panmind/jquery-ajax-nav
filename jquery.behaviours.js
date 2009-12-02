@@ -102,10 +102,19 @@ $('.toggler').live ('click', function () {
     $.behaviourError (this, 'no "rel" attribute defined on the toggler!');
 
   var togglee = toggler.hierarchyFind (selector);
-  var visible = !togglee.is (':visible'); // "!" is there because we didn't
-                                          // do the toggling yet :-)  - vjt
 
-  toggler.trigger ('toggled', visible);
+  // Explanation: check only the first element of a possibly multi-element
+  // jQuery array, because we need only a on/off flag. As long as jQuery
+  // returns elements always in the same order, this will keep working.
+  //
+  var visible = $(togglee[0]).is (':visible');
+
+  toggler.trigger ({type: 'toggled', togglee: togglee, visible: visible});
+
+  if (visible)
+    toggler.addClass ('expanded');
+  else
+    toggler.removeClass ('expanded');
 
   if (toggler.slider ())
     togglee.slideToggle ();
