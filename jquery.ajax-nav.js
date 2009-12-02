@@ -384,9 +384,11 @@ $.fn.navForm = function (options) {
   };
 
   if (options.live)
-    $(this).live ('submit', listener);
+    $(this).live ('submit', listener)
+      .live ('ajaxSubmit', listener);
   else
-    $(this).submit (listener);
+    $(this).bind ('submit', listener)
+      .bind ('ajaxSubmit', listener);
 
   return this;
 };
