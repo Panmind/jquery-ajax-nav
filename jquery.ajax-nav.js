@@ -514,7 +514,11 @@ $.navHistoryLoad = function (anchor) {
  */
 var __historyCurrent = undefined;
 var __historyChange = function (anchor) {
-  var requested = encodeURI (anchor);
+  // Better safe than sorry.
+  var requested = encodeURIComponent (decodeURIComponent (anchor));
+
+  if (__historyCurrent)
+    __historyCurrent = encodeURIComponent (decodeURIComponent (__historyCurrent));
 
   // $.log ('AJAX history - requested: "' + requested + '"');
   // $.log ('AJAX history - currently: "' + __historyCurrent + '"');
