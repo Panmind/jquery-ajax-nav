@@ -19,6 +19,7 @@ Extras
 
   * jquery.behaviours.js - Generic behaviours library
   * jquery.poller.js     - A poller that uses {set,clear}Interval
+  * jquery.queue.js      - A queue, FIFO or LIFO
   * jquery.log.js        - Small $.log helper
 
 Authors
