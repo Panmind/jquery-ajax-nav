@@ -16,6 +16,16 @@ $.behaviourError = function (element, message) {
   throw ('BUG: ' + message + ' - Please see ' + $.behaviourDocsURL);
 }
 
+// The K combinator :-)
+// TODO: move this aside from here
+//
+if (typeof (returning) == 'undefined') {
+  function returning (ret, fn) {
+    fn.call (ret);
+    return ret;
+  }
+}
+
 // This is convoluted, but necessary.
 //
 // Rationale: support finding items starting from the parent, without writing
