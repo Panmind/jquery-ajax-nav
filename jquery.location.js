@@ -33,7 +33,7 @@
  */
 $.location = new (function () { // Inline object creation and initialization
   // The anchor + query string parameters schema
-  var AnchorSchema  = /(^\/.*#)?([\w\/]+)([\d\s\w%:;=\[\]\\\"\+]+)?/;
+  var AnchorSchema  = /(^\/.*#)?([\w\/]+)([\d\s\w%:;=\[\]\\\"\+,]+)?/;
 
   // The anchor "section" schema
   var SectionSchema = /^\/?(\w+)\/?.*/;
