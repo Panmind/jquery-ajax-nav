@@ -172,9 +172,19 @@ $.navDefaultOptions = {};
  *    a path to redirect to: `params` is nullified, `method`
  *    is set to "get" and eventually the returned String is
  *    loaded, without updating the location anchor.
+ *
  *    The associated Rails' helper that implements the 202
- *    code response is named "render_path_or_redirect_to",
- *    defined inside the ProjectsBaseController.
+ *    code response could be named "ajax_redirect_to", a
+ *    valid implementation is as follows:
+ *
+ *       def ajax_redirect_to(path)
+ *         if request.xhr?
+ *           render :text => path, :status => 202 # Accepted
+ *         else
+ *           redirect_to path
+ *         end
+ *       end
+ *
  *  - If an error occurs, an alert () is shown (temporarily),
  *    and the `error` callback is fired if defined. If not,
  *    the container is updated with the bare "Error XXX" string.
