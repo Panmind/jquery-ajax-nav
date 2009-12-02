@@ -18,6 +18,7 @@ Extras
 ------
 
   * jquery.behaviours.js - Generic behaviours library
+  * jquery.poller.js     - A poller that uses {set,clear}Interval
   * jquery.log.js        - Small $.log helper
 
 Authors
