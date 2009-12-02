@@ -76,6 +76,12 @@
  *               the base path of the links, such as "/example/" or
  *               "/\/project\/\d\/?/"
  *
+ *  - replace:   Boolean (optional, default: false)
+ *               by default, the container is filled with the response
+ *               returned by the server (using .html ()). If this option
+ *               is true, the container is replaced with the server
+ *               response (using .replaceWith ()).
+ *
  *  - root:      String (optional)
  *               the default URL path to load upon initialization,
  *               if no anchor is requested by the user.
@@ -247,7 +253,10 @@ $.navLoadContent = function (loader, options) {
         // the `success` and the contentLoaded event.
         // Eventually, opaque () the container back.
         //
-        options.container.html (response);
+        if (options.replace)
+          options.container.replaceWith (response);
+        else
+          options.container.html (response);
 
         if (method == 'get') {
           var anchor = options.href.replace (options.base, '');
