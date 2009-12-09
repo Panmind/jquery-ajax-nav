@@ -139,18 +139,16 @@ $('.toggler').live ('click', function () {
 $('.asker').live ('click', function () {
   var asker    = $(this);
   var question = asker.attr ('title');
+  var deletee  = undefined;
 
   if (!question)
     $.behaviourError (this, 'no "title" attribute defined on the asker!');
 
-  if (!asker.hasClass ('deleter'))
-    return confirm (question);
+  if (asker.hasClass ('deleter'))
+    deletee = asker.hierarchyFind (asker.attr ('rel')).dim ();
 
-  var deletee = asker.hierarchyFind (asker.attr ('rel'));
-
-  deletee.dim ();
-  returning (confirm (question), function (confirmation) {
-    if (!confirmation)
+  return combine (confirm (question), function (confirmation) {
+    if (!confirmation && deletee)
       deletee.opaque ();
   });
 });
