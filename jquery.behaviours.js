@@ -119,7 +119,7 @@ $('.toggler').live ('click', function () {
 
   toggler.trigger ({type: 'toggled', togglee: togglee, visible: visible});
 
-  if (visible)
+  if (!visible)
     toggler.addClass ('expanded');
   else
     toggler.removeClass ('expanded');
@@ -188,12 +188,10 @@ $('.deleter').live ('click', function () {
   };
 
   $.post (href, {'_method': 'delete'}, function (data, textStatus) {
-
     if (deleter.fader ())
       deletee.fadeOut (speed, remove);
     else
       remove ();
-
   });
 
   return false;
