@@ -19,11 +19,9 @@ $.behaviourError = function (element, message) {
 // The K combinator :-)
 // TODO: move this aside from here
 //
-if (typeof (returning) == 'undefined') {
-  function returning (ret, fn) {
-    fn.call (ret);
-    return ret;
-  }
+function combine (ret, fn) {
+  fn (ret);
+  return ret;
 }
 
 // This is convoluted, but necessary.
