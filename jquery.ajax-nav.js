@@ -211,9 +211,24 @@ $.navLoadContent = function (loader, options) {
   // Uhm. This could be heavy, and should be moved into a separate function
   // called by both navForm () and navLink ().
   //
-  if (options.container.length == 0) {
+  // This conditional checks whether the options.container exists on the page,
+  // because it could not be rendered yet when the navLink/Form () is invoked,
+  // as implemented in the private __validateOptions () method.
+  //
+  // Moreover, the container could disappear, e.g. when it is replaced by some
+  // other code: that's why the `length` check is performed on the `parent ()`
+  // because an element that has no parent () has been removed from the DOM.
+  //
+  if (options.container.parent ().length == 0) {
     // $.log ('AJAX nav: reloading container ' + options.container.selector);
     options.container = $(options.container.selector);
+
+    // Still missing? Hey, this is a bug!
+    if (options.container.length == 0) {
+      $.log ('AJAX nav BUG: target DOM element ' + options.container.selector +
+               ' not found, even after trying to re-select it before AJAX load');
+      return false;
+    }
   }
 
   // Let's begin the party...
