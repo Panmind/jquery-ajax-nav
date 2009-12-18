@@ -3,14 +3,19 @@
 var Poller = function (options) {
   var form = $(options.element).find ('form');
   var url  = form.attr ('action');
+  var type = options.type || 'POST';
+  var dataType = options.dataType || null;
 
   var poll = function () {
     var self = this;
+
     $.ajax ({
       url : url,
-      type: 'POST',
+      type: type,
       data: form.serialize (),
+      dataType  : dataType,
       beforeSend: options.loading,
+      complete  : options.complete,
       success   : options.success,
       error     : options.error
     });
