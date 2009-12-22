@@ -131,6 +131,8 @@ $('.toggler').live ('click', function () {
   else
     togglee.toggle ();
 
+  toggler.trigger ({type: 'afterToggle', togglee: togglee, visible: visible});
+
   var bubble = toggler.hasClass ('swapper');
   return bubble;
 });
