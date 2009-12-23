@@ -115,6 +115,10 @@
  *               do not alter `container` contents after a successful
  *               AJAX load.
  *
+ *  - noDisable: Boolean (optional, default: false)
+ *               do not disable the user interface by calling .dim ()
+ *               on the container when the AJAX load starts.
+ *
  *  - loading:   Function (optional)
  *               a callback fired when loading starts.
  *               Inside the callback, "this" is set to the HTML
@@ -246,7 +250,8 @@ $.navLoadContent = function (loader, options) {
     // call the `loading` callback and log debug details to the console
     //
     beforeSend: function (xhr) {
-      options.container.dim ();
+      if (!options.noDisable)
+        options.container.dim ();
 
       if (__historyCurrent && !options.noEvents) {
         // $.log ('triggering pm:contentUnloading');
@@ -327,7 +332,9 @@ $.navLoadContent = function (loader, options) {
           $(document).trigger ('pm:contentLoaded');
         }
 
-        options.container.opaque ();
+        if (!options.noDisable)
+          options.container.opaque ();
+
       } else if (error) {
         // Something went wrong, notify the user and opaque () the
         // container back.
