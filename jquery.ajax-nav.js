@@ -111,6 +111,10 @@
  *  - noHistory: Boolean (optional, default: false)
  *               do not alter history after a successful load.
  *
+ *  - noUpdate:  Boolean (optional, default: false)
+ *               do not alter `container` contents after a successful
+ *               AJAX load.
+ *
  *  - loading:   Function (optional)
  *               a callback fired when loading starts.
  *               Inside the callback, "this" is set to the HTML
@@ -292,15 +296,23 @@ $.navLoadContent = function (loader, options) {
         $.navLoadContent (loader, options);
 
       } else if (response) {
-        // OK, everything right: update the container, update the
-        // location and the history (to avoid double loads), trigger
-        // the `success` and the contentLoaded event.
+        // OK, everything right. If the user doesn't want to update
+        // the container, pass the response to the `success` callback.
+        //
+        // Else, update the location and the history (to avoid double
+        // loads), and trigger the `success` and the `contentLoaded`
+        // events.
+        //
         // Eventually, opaque () the container back.
         //
-        if (options.replace)
-          options.container.replaceWith (response);
-        else
-          options.container.html (response);
+        if (options.noUpdate) {
+          options.response = response;
+        } else {
+          if (options.replace)
+            options.container.replaceWith (response);
+          else
+            options.container.html (response);
+        }
 
         if (method == 'get' && !options.noHistory) {
           var anchor = options.href.replace (options.base, '');
