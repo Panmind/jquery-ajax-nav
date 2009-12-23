@@ -135,6 +135,11 @@
  *               Inside the callback, "this" is set to the HTML
  *               element that triggered the AJAX load.
  *
+ *  - complete:  Function (optional)
+ *               a callback fired when the request is complete,
+ *               after the `error` and `success` callbacks have
+ *               been executed.
+ *
  *  - method:    String (optional)
  *               the HTTP method to use when loading. Can be
  *               'get', 'post', 'put' or 'delete'.
@@ -299,6 +304,7 @@ $.navLoadContent = function (loader, options) {
         options.params = null;
 
         $.navLoadContent (loader, options);
+        return;
 
       } else if (response) {
         // OK, everything right. If the user doesn't want to update
@@ -332,18 +338,19 @@ $.navLoadContent = function (loader, options) {
           $(document).trigger ('pm:contentLoaded');
         }
 
-        if (!options.noDisable)
-          options.container.opaque ();
-
       } else if (error) {
         // Something went wrong, notify the user and opaque () the
         // container back.
         //
         options.lastError = { xhr: xhr, message: error }; // XXX
         __invoke ('error', options, loader);
-        options.lastError = undefined;                    // XXX
-        options.container.opaque ();
       }
+
+      if (!options.noDisable)
+        options.container.opaque ();
+
+      __invoke ('complete', options, loader);
+      options.lastError = undefined;                      // XXX
     }
 
   });
