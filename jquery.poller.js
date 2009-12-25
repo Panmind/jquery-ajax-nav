@@ -24,8 +24,13 @@ var Poller = function (options) {
   var id = undefined;
 
   this.start = function () {
-    this.log ('polling');
-    poll.apply (this);
+    if (!options.delayed) {
+      this.log ('polling');
+      poll.apply (this);
+    } else {
+      this.log ('delaying by ' + options.timeout + 'ms');
+    }
+
     id = window.setInterval (poll, options.timeout);
   };
 
