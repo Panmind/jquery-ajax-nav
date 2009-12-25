@@ -3,14 +3,19 @@
 var Poller = function (options) {
   var form = $(options.element).find ('form');
   var url  = form.attr ('action');
+  var type = options.type || 'POST';
+  var dataType = options.dataType || null;
 
   var poll = function () {
     var self = this;
+
     $.ajax ({
       url : url,
-      type: 'POST',
+      type: type,
       data: form.serialize (),
+      dataType  : dataType,
       beforeSend: options.loading,
+      complete  : options.complete,
       success   : options.success,
       error     : options.error
     });
@@ -19,8 +24,13 @@ var Poller = function (options) {
   var id = undefined;
 
   this.start = function () {
-    this.log ('polling');
-    poll.apply (this);
+    if (!options.delayed) {
+      this.log ('polling');
+      poll.apply (this);
+    } else {
+      this.log ('delaying by ' + options.timeout + 'ms');
+    }
+
     id = window.setInterval (poll, options.timeout);
   };
 
