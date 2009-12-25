@@ -111,6 +111,14 @@
  *  - noHistory: Boolean (optional, default: false)
  *               do not alter history after a successful load.
  *
+ *  - noUpdate:  Boolean (optional, default: false)
+ *               do not alter `container` contents after a successful
+ *               AJAX load.
+ *
+ *  - noDisable: Boolean (optional, default: false)
+ *               do not disable the user interface by calling .dim ()
+ *               on the container when the AJAX load starts.
+ *
  *  - loading:   Function (optional)
  *               a callback fired when loading starts.
  *               Inside the callback, "this" is set to the HTML
@@ -126,6 +134,11 @@
  *               a callback fired when there is an error.
  *               Inside the callback, "this" is set to the HTML
  *               element that triggered the AJAX load.
+ *
+ *  - complete:  Function (optional)
+ *               a callback fired when the request is complete,
+ *               after the `error` and `success` callbacks have
+ *               been executed.
  *
  *  - method:    String (optional)
  *               the HTTP method to use when loading. Can be
@@ -211,9 +224,24 @@ $.navLoadContent = function (loader, options) {
   // Uhm. This could be heavy, and should be moved into a separate function
   // called by both navForm () and navLink ().
   //
-  if (options.container.length == 0) {
+  // This conditional checks whether the options.container exists on the page,
+  // because it could not be rendered yet when the navLink/Form () is invoked,
+  // as implemented in the private __validateOptions () method.
+  //
+  // Moreover, the container could disappear, e.g. when it is replaced by some
+  // other code: that's why the `length` check is performed on the `parent ()`
+  // because an element that has no parent () has been removed from the DOM.
+  //
+  if (options.container.parent ().length == 0) {
     // $.log ('AJAX nav: reloading container ' + options.container.selector);
     options.container = $(options.container.selector);
+
+    // Still missing? Hey, this is a bug!
+    if (options.container.length == 0) {
+      $.log ('AJAX nav BUG: target DOM element ' + options.container.selector +
+               ' not found, even after trying to re-select it before AJAX load');
+      return false;
+    }
   }
 
   // Let's begin the party...
@@ -227,7 +255,8 @@ $.navLoadContent = function (loader, options) {
     // call the `loading` callback and log debug details to the console
     //
     beforeSend: function (xhr) {
-      options.container.dim ();
+      if (!options.noDisable)
+        options.container.dim ();
 
       if (__historyCurrent && !options.noEvents) {
         // $.log ('triggering pm:contentUnloading');
@@ -275,17 +304,26 @@ $.navLoadContent = function (loader, options) {
         options.params = null;
 
         $.navLoadContent (loader, options);
+        return;
 
       } else if (response) {
-        // OK, everything right: update the container, update the
-        // location and the history (to avoid double loads), trigger
-        // the `success` and the contentLoaded event.
+        // OK, everything right. If the user doesn't want to update
+        // the container, pass the response to the `success` callback.
+        //
+        // Else, update the location and the history (to avoid double
+        // loads), and trigger the `success` and the `contentLoaded`
+        // events.
+        //
         // Eventually, opaque () the container back.
         //
-        if (options.replace)
-          options.container.replaceWith (response);
-        else
-          options.container.html (response);
+        if (options.noUpdate) {
+          options.response = response;
+        } else {
+          if (options.replace)
+            options.container.replaceWith (response);
+          else
+            options.container.html (response);
+        }
 
         if (method == 'get' && !options.noHistory) {
           var anchor = options.href.replace (options.base, '');
@@ -300,21 +338,19 @@ $.navLoadContent = function (loader, options) {
           $(document).trigger ('pm:contentLoaded');
         }
 
-        options.container.opaque ();
       } else if (error) {
         // Something went wrong, notify the user and opaque () the
         // container back.
         //
-        // XXX replace this with proper error presentation to the user
-        //   - vjt  Mon Nov 16 14:56:51 CET 2009
-        //
-        alert ("Something went wrong: an " + error + " occurred :-(");
-
+        options.lastError = { xhr: xhr, message: error }; // XXX
         __invoke ('error', options, loader);
-
-        options.container.html ('<p class="error">Error ' + xhr.status + '</p>');
-        options.container.opaque ();
       }
+
+      if (!options.noDisable)
+        options.container.opaque ();
+
+      __invoke ('complete', options, loader);
+      options.lastError = undefined;                      // XXX
     }
 
   });
