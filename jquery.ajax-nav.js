@@ -339,14 +339,9 @@ $.navLoadContent = function (loader, options) {
         // Something went wrong, notify the user and opaque () the
         // container back.
         //
-        // XXX replace this with proper error presentation to the user
-        //   - vjt  Mon Nov 16 14:56:51 CET 2009
-        //
-        alert ("Something went wrong: an " + error + " occurred :-(");
-
+        options.lastError = { xhr: xhr, message: error }; // XXX
         __invoke ('error', options, loader);
-
-        options.container.html ('<p class="error">Error ' + xhr.status + '</p>');
+        options.lastError = undefined;                    // XXX
         options.container.opaque ();
       }
     }
