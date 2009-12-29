@@ -18,8 +18,10 @@ Extras
 ------
 
   * jquery.behaviours.js - Generic behaviours library
+  * jquery.dim-opaque.js - Helpers to disable parts of the UI
   * jquery.poller.js     - A poller that uses {set,clear}Interval
   * jquery.queue.js      - A queue, FIFO or LIFO
+  * jquery.diffhtml.js   - An HTML diff routine based on DOMParser
   * jquery.log.js        - Small $.log helper
 
 Authors
