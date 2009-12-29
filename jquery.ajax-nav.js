@@ -445,7 +445,7 @@ $.navInit = function () {
 
   if (!$.navDefaultOptions.base.test (base))
     throw (
-      'BUG: the given base "' + base +
+      'BUG: the actual base "' + base +
       '" does not match the configured one "' +
       $.navDefaultOptions.base + "'"
     );
