@@ -10,7 +10,6 @@ in the source files.
 Core
 ----
 
-  * jquery.history.js  - jQuery history management
   * jquery.location.js - Document location handling
   * jquery.ajax-nav.js - AJAX navigation framework
 
@@ -23,6 +22,12 @@ Extras
   * jquery.queue.js      - A queue, FIFO or LIFO
   * jquery.diffhtml.js   - An HTML diff routine based on DOMParser
   * jquery.log.js        - Small $.log helper
+
+Support libraries
+-----------------
+
+  * vendor/jquery.history.js - jQuery history management
+  * vendor/jsdifflib.js      - Javascript Diff Library
 
 Authors
 -------
