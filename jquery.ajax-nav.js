@@ -438,7 +438,10 @@ $.fn.navForm = function (options) {
 $.navInit = function () {
   // Initialize the base path
   //
-  var base = $.location.getPath () + '/';
+  var base = $.location.getPath ();
+
+  if (!/\/$/.test (base))
+    base = base.replace (/\/[^\/]+$/, '/');
 
   if (!$.navDefaultOptions.base.test (base))
     throw (
