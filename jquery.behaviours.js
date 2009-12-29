@@ -16,14 +16,6 @@ $.behaviourError = function (element, message) {
   throw ('BUG: ' + message + ' - Please see ' + $.behaviourDocsURL);
 }
 
-// The K combinator :-)
-// TODO: move this aside from here
-//
-function combine (ret, fn) {
-  fn (ret);
-  return ret;
-}
-
 // This is convoluted, but necessary.
 //
 // Rationale: support finding items starting from the parent, without writing
