@@ -7,6 +7,16 @@ Tutorial documentation is a work in progress. In the
 meantime, have a look at the reference documentation
 in the source files.
 
+Demo
+----
+
+Fire up your browser to the demo/index.html file, click
+on the links, use history, bookmark a link and then re-
+navigate it, refresh, etc.
+
+TODO: styling, forms, micro-appserver to demonstrate
+the full features (sinatra?).
+
 Core
 ----
 
