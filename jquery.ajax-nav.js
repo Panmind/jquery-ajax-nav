@@ -278,16 +278,7 @@ $.navLoadContent = function (loader, options) {
     // Oh noes! Save the error for further processing
     //
     error: function (xhr, textStatus, thrownError) {
-      // XXX replace this with proper error handling
-      //   - vjt  Mon Nov 16 13:50:49 CET 2009
-      //
       error = textStatus;
-
-      $.log ('Oh, noes!');
-
-      if (thrownError)
-        $.log ("thrownError with message '" + thrownError.message +
-               "' in '" + thrownError.fileName + "'");
     },
 
     // Let's end the party...
@@ -339,8 +330,8 @@ $.navLoadContent = function (loader, options) {
         }
 
       } else if (error) {
-        // Something went wrong, notify the user and opaque () the
-        // container back.
+        // Something went wrong, call user-defined callbacks
+        // and opaque () the container back.
         //
         options.lastError = { xhr: xhr, message: error }; // XXX
         __invoke ('error', options, loader);
@@ -451,7 +442,7 @@ $.navInit = function () {
 
   if (!$.navDefaultOptions.base.test (base))
     throw (
-      'BUG: the given base "' + base + 
+      'BUG: the given base "' + base +
       '" does not match the configured one "' +
       $.navDefaultOptions.base + "'"
     );
