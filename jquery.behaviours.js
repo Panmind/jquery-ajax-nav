@@ -118,14 +118,21 @@ $('.toggler').live ('click', function () {
   else
     toggler.removeClass ('expanded');
 
-  if (toggler.slider ())
-    togglee.slideToggle ();
-  else if (toggler.fader ())
-    togglee.fadeToggle ();
-  else
-    togglee.toggle ();
+  var afterToggle = function () {
+    toggler.trigger ({
+      type: 'afterToggle', toggler: toggler,
+      togglee: togglee,    visible: visible
+    });
+  };
 
-  toggler.trigger ({type: 'afterToggle', togglee: togglee, visible: visible});
+  if (toggler.slider ())
+    togglee.slideToggle (afterToggle);
+  else if (toggler.fader ())
+    togglee.fadeToggle (afterToggle);
+  else {
+    togglee.toggle ();
+    afterToggle ();
+  }
 
   var bubble = toggler.hasClass ('swapper');
   return bubble;
