@@ -70,8 +70,9 @@ $.fn.slider = function () {
   $.fn.slideToggle = function () {
     var element = $(this);
     var speed   = arguments[0] || 'fast';
+    var after   = arguments[1];
 
-    return slideToggle.apply (this, [speed]);
+    return slideToggle.apply (this, [speed, after]);
   };
 
   // Fade toggling
@@ -80,15 +81,16 @@ $.fn.slider = function () {
   // ("fast").
   //
   $.fn.fadeToggle = function () {
-    var speed   = arguments[0] || 'fast';
+    var speed = arguments[0] || 'fast';
+    var after = arguments[1];
 
     return this.each (function () {
       var element = $(this)
 
       if (element.is (':hidden'))
-        element.fadeIn (speed);
+        element.fadeIn (speed, after);
       else
-        element.fadeOut (speed);
+        element.fadeOut (speed, after);
     });
   };
 })();
