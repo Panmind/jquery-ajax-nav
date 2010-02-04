@@ -348,3 +348,10 @@ $('.deselecter').live ('click', function () {
   $(selector + ':checkbox').check (false);
   return false;
 });
+
+// makes a checkbox rule a set of checkboxes
+//
+$('.massCheckboxSelecter').live ('click', function () {
+  var selector = $(this).attr('rel');
+  $(selector + ':checkbox').check ($(this).attr('checked'));
+});
