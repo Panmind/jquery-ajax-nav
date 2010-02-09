@@ -5,6 +5,7 @@ var Poller = function (options) {
   var url  = form.attr ('action');
   var type = options.type || 'POST';
   var dataType = options.dataType || null;
+  var dataFunc = options.dataFunc || function () { return form.serialize (); }
 
   var poll = function () {
     var self = this;
@@ -12,7 +13,7 @@ var Poller = function (options) {
     $.ajax ({
       url : url,
       type: type,
-      data: form.serialize (),
+      data: dataFunc.apply (this, [form]),
       dataType  : dataType,
       beforeSend: options.loading,
       complete  : options.complete,
