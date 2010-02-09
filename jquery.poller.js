@@ -24,6 +24,9 @@ var Poller = function (options) {
   var id = undefined;
 
   this.start = function () {
+    if (id)
+      return; // Already running
+
     if (!options.delayed) {
       this.log ('polling');
       poll.apply (this);
