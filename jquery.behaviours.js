@@ -145,22 +145,32 @@ $('.toggler').live ('click', function () {
 $('.toggler.autoCloser').live ('afterToggle', function (event) {
   var toggler = event.toggler, togglee = event.togglee, visible = event.visible;
 
-  if (visible)
+  if (!toggler.data ('autoCloser')) {
+    toggler.data ('autoCloser', {
+      area:    $.circumscribe (togglee, toggler, {pad: 5}),
+      handler: function (event) {
+        if ($.covers (event, event.data.area)) // Still in the area
+          return;
+
+        // No more in the area: unbind and click if it is not expanded
+        $(document).unbind ('mousemove', arguments.callee);
+
+        if (toggler.hasClass ('expanded'))
+          event.data.toggler.click ();
+      }
+    });
+  }
+
+  var data = toggler.data ('autoCloser');
+
+  if (visible) { // Already closed
+    $(document).unbind ('mousemove', data.handler);
     return;
+  }
 
-  if (!toggler.data ('autoCloser:area'))
-    toggler.data ('autoCloser:area', $.circumscribe (togglee, toggler));
-
-  var area = toggler.data ('autoCloser:area');
-
-  $(document).bind ('mousemove', function (event) {
-    if ($.covers (event, area))
-      return;
-
-    $(document).unbind ('mousemove', arguments.callee);
-    toggler.click ();
-  });
+  $(document).bind ('mousemove', {area: data.area, toggler: toggler}, data.handler);
 });
+
 
 // The asker
 $('.asker').live ('click', function () {
