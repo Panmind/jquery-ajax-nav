@@ -37,6 +37,11 @@
 		return stripQuery(iframe.contentWindow.document.location.hash);
 	}
 
+	function invokeCallback() {
+		if (historyCurrentHash)
+			historyCallback(historyCurrentHash.replace(/^#/, ''));
+	}
+
 	function stripQuery(s) {
 		return s.replace(/\?.*$/, '');
 	}
@@ -57,8 +62,7 @@ $.extend({
 			iframe_set(current_hash);
 		}
 
-		if(current_hash)
-			historyCallback(current_hash.replace(/^#/, ''));
+		invokeCallback();
 
 		setInterval($.historyCheck, 100);
 	},
@@ -71,8 +75,7 @@ $.extend({
 			if(current_hash != historyCurrentHash) {
 				location.hash = current_hash;
 				historyCurrentHash = current_hash;
-				historyCallback(current_hash.replace(/^#/, ''));
-				
+				invokeCallback();
 			}
 		} else {
 			// otherwise, check for location.hash
@@ -80,14 +83,14 @@ $.extend({
 
 			if(current_hash != historyCurrentHash) {
 				historyCurrentHash = current_hash;
-				historyCallback(current_hash.replace(/^#/, ''));
+				invokeCallback();
 			}
 		}
 	},
 
 	historyLoad: function(hash){
 		$.historySave(hash);
-		historyCallback(hash);
+		invokeCallback();
 	},
 
 	historySave: function(hash) {
