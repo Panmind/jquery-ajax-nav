@@ -13,7 +13,7 @@
 
 (function ($) {
 
-	var historyCurrentHash, historyCallback, historyIframeSrc, historyNeedIframe;
+	var historyCurrentHash, historyCallback, historyNeedIframe;
 
 	historyNeedIframe = $.browser.msie && ($.browser.version < 8 || document.documentMode < 8);
 
@@ -39,9 +39,8 @@
 
 $.extend({
 
-	historyInit: function(callback, src){
+	historyInit: function(callback){
 		historyCallback = callback;
-		if (src) historyIframeSrc = src;
 		var current_hash = location.hash.replace(/\?.*$/, '');
 		
 		historyCurrentHash = current_hash;
