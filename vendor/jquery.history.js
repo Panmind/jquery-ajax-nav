@@ -82,7 +82,11 @@ $.extend({
 	},
 
 	historyLoad: function(hash){
-		var call_back = typeof(arguments[1]) == 'undefined' ? true : !!arguments[1];
+		$.historySave(hash);
+		historyCallback(hash);
+	},
+
+	historySave: function(hash) {
 		hash = decodeURIComponent(hash.replace(/\?.*$/, ''));
 
 		if (hash[0] != '#')
@@ -91,16 +95,10 @@ $.extend({
 		historyCurrentHash = hash;
 		
 		if (historyNeedIframe) {
-			iframe_set(newhash);
-			if (call_back)
-				historyCallback(hash);
+			iframe_set(hash);
+		} else {
+			location.hash = hash;
 		}
-		else if (call_back) {
-		  historyCallback(hash);
-		}
-	},
-	historySave: function(hash) {
-		$.historyLoad(hash, false);
 	}
 });
 
