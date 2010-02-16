@@ -50,16 +50,16 @@ $.extend({
 
 	historyInit: function(callback){
 		historyCallback = callback;
-		var current_hash = stripQuery(location.hash);
+
+		var hash = stripQuery(location.hash);
 		
-		historyCurrentHash = current_hash;
 		if (historyNeedIframe) {
 			// To stop the callback firing twice during initilization if no hash present
-			if (historyCurrentHash == '') {
-				historyCurrentHash = '#';
-			}
+			if (hash == '')
+				hash = '#';
+
 			iframe_init();
-			iframe_set(current_hash);
+			$.historySave(hash);
 		}
 
 		invokeCallback();
@@ -70,19 +70,18 @@ $.extend({
 	historyCheck: function(){
 		if (historyNeedIframe) {
 			// On IE, check for location.hash of iframe
-			var current_hash = iframe_get();
+			var hash = iframe_get();
 
-			if(current_hash != historyCurrentHash) {
-				location.hash = current_hash;
-				historyCurrentHash = current_hash;
+			if (hash != $.historyCurrent()) {
+				$.historySave(hash);
 				invokeCallback();
 			}
 		} else {
 			// otherwise, check for location.hash
-			var current_hash = stripQuery(location.hash);
+			var hash = stripQuery(location.hash);
 
-			if(current_hash != historyCurrentHash) {
-				historyCurrentHash = current_hash;
+			if (hash != $.historyCurrent()) {
+				$.historySave(hash);
 				invokeCallback();
 			}
 		}
@@ -106,7 +105,14 @@ $.extend({
 		} else {
 			location.hash = hash;
 		}
+
+		return historyCurrentHash;
+	},
+
+	historyCurrent: function(){
+		return historyCurrentHash;
 	}
+
 });
 
 })(jQuery);
