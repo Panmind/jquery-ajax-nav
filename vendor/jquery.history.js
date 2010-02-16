@@ -34,14 +34,18 @@
 	}
 
 	function iframe_get() {
-		return iframe.contentWindow.document.location.hash.replace(/\?.*$/, '');
+		return stripQuery(iframe.contentWindow.document.location.hash);
+	}
+
+	function stripQuery(s) {
+		return s.replace(/\?.*$/, '');
 	}
 
 $.extend({
 
 	historyInit: function(callback){
 		historyCallback = callback;
-		var current_hash = location.hash.replace(/\?.*$/, '');
+		var current_hash = stripQuery(location.hash);
 		
 		historyCurrentHash = current_hash;
 		if (historyNeedIframe) {
@@ -72,7 +76,7 @@ $.extend({
 			}
 		} else {
 			// otherwise, check for location.hash
-			var current_hash = location.hash.replace(/\?.*$/, '');
+			var current_hash = stripQuery(location.hash);
 
 			if(current_hash != historyCurrentHash) {
 				historyCurrentHash = current_hash;
@@ -87,7 +91,7 @@ $.extend({
 	},
 
 	historySave: function(hash) {
-		hash = decodeURIComponent(hash.replace(/\?.*$/, ''));
+		hash = decodeURIComponent(stripQuery(hash))
 
 		if (hash[0] != '#')
 			hash = '#' + hash;
