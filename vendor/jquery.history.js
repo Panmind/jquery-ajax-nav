@@ -122,6 +122,7 @@ jQuery.extend({
 	},
 	historyLoad: function(hash){
 		var newhash;
+		var call_back = typeof(arguments[1]) == 'undefined' ? true : !!arguments[1];
 		hash = decodeURIComponent(hash.replace(/\?.*$/, ''));
 		
 		if (jQuery.browser.safari) {
@@ -140,7 +141,8 @@ jQuery.extend({
 			iframe.close();
 			iframe.location.hash = newhash;
 			jQuery.lastHistoryLength = history.length;
-			jQuery.historyCallback(hash);
+			if (call_back)
+				jQuery.historyCallback(hash);
 		}
 		else if (jQuery.browser.safari) {
 			jQuery.dontCheck = true;
@@ -151,15 +153,20 @@ jQuery.extend({
 			// correctly (otherwise the check loop would detect a false change in hash).
 			var fn = function() {jQuery.dontCheck = false;};
 			window.setTimeout(fn, 200);
-			jQuery.historyCallback(hash);
+			if (call_back)
+				jQuery.historyCallback(hash);
 			// N.B. "location.hash=" must be the last line of code for Safari as execution stops afterwards.
 			//      By explicitly using the "location.hash" command (instead of using a variable set to "location.hash") the
 			//      URL in the browser and the "history" object are both updated correctly.
 			location.hash = newhash;
 		}
-		else {
+		else if (call_back) {
 		  jQuery.historyCallback(hash);
 		}
+	},
+	historySave: function(hash) {
+		jQuery.historyLoad(hash, false);
 	}
 });
+
 
