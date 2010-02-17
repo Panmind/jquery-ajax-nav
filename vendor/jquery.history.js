@@ -82,7 +82,7 @@ $.extend({
 		if (!changed(hash))
 			return;
 
-		$.historySave(hash);
+		$.historySave(hash, true);
 		invokeCallback();
 	},
 
@@ -94,7 +94,7 @@ $.extend({
 		invokeCallback();
 	},
 
-	historySave: function(hash) {
+	historySave: function(hash, skipIframe) {
 		hash = decodeURIComponent(stripQuery(hash))
 
 		if (hash[0] != '#')
@@ -108,7 +108,8 @@ $.extend({
 		
 		location.hash = hash;
 
-		return historyCurrentHash;
+		if (iframe && !skipIframe)
+			iframe_set(hash);
 	},
 
 	historyCurrent: function(){
