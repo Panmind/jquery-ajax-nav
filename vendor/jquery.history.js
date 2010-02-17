@@ -97,7 +97,7 @@ $.extend({
 	historySave: function(hash, skipIframe) {
 		hash = decodeURIComponent(stripQuery(hash))
 
-		if (hash[0] != '#')
+		if (!hash.match(/^#/))
 			hash = '#' + hash;
 
 		if (!changed(hash)) {
