@@ -258,7 +258,7 @@ $.navLoadContent = function (loader, options) {
       if (!options.noDisable)
         options.container.dim ();
 
-      if (__historyCurrent && !options.noEvents) {
+      if ($.history.current () && !options.noEvents) {
         // $.log ('triggering pm:contentUnloading');
         $(document).trigger ('pm:contentUnloading');
       }
@@ -319,7 +319,7 @@ $.navLoadContent = function (loader, options) {
         if (method == 'get' && !options.noHistory) {
           var anchor = options.href.replace (options.base, '');
           // $.log ("Updating anchor to " + anchor);
-          __historyCurrent = $.location.setAnchor (anchor).replace (/^#/, '');
+          $.history.save (anchor);
         }
 
         __invoke ('success', options, loader)
@@ -453,11 +453,6 @@ $.navInit = function () {
   $.navDefaultOptions.base = base;
   // $.log ('AJAX nav init: set base to "' + base + "'");
 
-  // Initialize the jquery.history plugin
-  //
-  $.historyInit (__historyChange);
-  // $.log ('AJAX nav init: history initialized');
-
   // Initialize the default target container
   //
   var container = $.navDefaultOptions.container;
@@ -468,9 +463,14 @@ $.navInit = function () {
 
   // $.log ('AJAX nav init: found the "' + container + '" container');
 
+  // Initialize the jquery.history plugin
+  //
+  $.history.init ($.navHistoryLoad);
+
   // Load the anchor currently in the URL bar
   //
   var anchor = $.location.getAnchors ();
+
   // $.log ('AJAX nav init: navigating to "' + anchor + '"');
   $.navHistoryLoad (anchor);
 
@@ -493,7 +493,7 @@ $.navInit = function () {
  * Returns boolean, indicating wheter hijack happened or not, that
  * is useful to skip the $.navInit () in your .ready () event. I
  * tried to implement it using .unbind () but I hadn't success:
- * better safe than sorry.o
+ * better safe than sorry.
  *
  */
 $.navHijack = function () {
@@ -530,44 +530,12 @@ $.navHijack = function () {
 };
 
 /**
- * This function simply calls the private __historyLoad function
+ * This function gets called when history changes,
+ * and it gets passed the currently active anchor name.
  */
-$.navHistoryLoad = function (anchor) {
-  __historyLoad (anchor);
-};
-
-/**
- * *Private*: This function gets called when history changes,
- * and it gets passed the currently active anchor name. If it
- * is different from the one currently loaded, the __historyLoad
- * function gets called.
- */
-var __historyCurrent = undefined;
-var __historyChange = function (anchor) {
-  // Better safe than sorry.
-  var requested = encodeURIComponent (decodeURIComponent (anchor));
-
-  if (__historyCurrent)
-    __historyCurrent = encodeURIComponent (decodeURIComponent (__historyCurrent));
-
-  // $.log ('AJAX history - requested: "' + requested + '"');
-  // $.log ('AJAX history - currently: "' + __historyCurrent + '"');
-
-  if (__historyCurrent && requested != __historyCurrent)
-    __historyLoad (anchor);
-};
-
-/**
- * *Private*: This function gets called from the __historyChange
- * callback when there is data to load due to a history back or
- * forward.
- */
-var __historyLoad = function (anchor) {
+$.navHistoryLoad = function (anchor, options) {
   if (!anchor)
     anchor = $.navDefaultOptions.root;
-
-  if (!anchor)
-    return;
 
   var path    = $.location.getAnchorPath (anchor);
   var params  = $.location.getAnchorParams (anchor);
