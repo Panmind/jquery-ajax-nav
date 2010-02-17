@@ -12,6 +12,7 @@
  *
  *   - vjt  Mon Nov  2 21:50:20 CET 2009
  */
+
 (function () {
   // This private function adds <ins> and <del> elements
   // taking care of wrapping them into the outermost HTML
@@ -63,6 +64,7 @@
     return result;
   };
 
+
   $.diffHTML = function (a, b) {
     // Parsing HTML with Regexes is bad. Aren't you convinced? Read this:
     //
@@ -72,8 +74,8 @@
     //
     var parser = new DOMParser (); // IE uses the brige defined below.
 
-    var docA = parser.parseFromString('<w>' + a + '</w>', 'text/xml');
-    var docB = parser.parseFromString('<w>' + b + '</w>', 'text/xml');
+    var docA = parser.parseFromString ('<w>' + a + '</w>', 'text/xml');
+    var docB = parser.parseFromString ('<w>' + b + '</w>', 'text/xml');
 
     // Reduce the parsed documents to an array of single-word tokens
     // using the toTokens reducer method
@@ -83,7 +85,7 @@
 
     // Do the diff
     //
-    var matcher = new difflib.SequenceMatcher (a, b)
+    var matcher = new difflib.SequenceMatcher (a, b);
 
     // And reduce the opcodes to an HTML representation of the differences.
     //
