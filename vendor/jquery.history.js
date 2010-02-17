@@ -13,9 +13,10 @@
 
 (function ($) {
 
-	var historyCurrentHash, historyCallback;
+	var _current, _callback;
 
 	var iframe;
+
 	function iframe_init(hash) {
 		iframe = $('#ie_history')[0];
 	}
@@ -28,7 +29,6 @@
 			doc.write('<html><body>' + hash + '</body></html>');
 			doc.close();
 
-			$.log("iframe set to " + hash);
 			return true;
 		} catch (e) {
 			return false;
@@ -41,9 +41,9 @@
 		} catch (e) { return ''; }
 	}
 
-	function invokeCallback() {
-		if (historyCurrentHash)
-			historyCallback(historyCurrentHash.replace(/^#/, ''));
+	function invoke () {
+		if (_current)
+			_callback (_current.replace(/^#/, ''));
 	}
 
 	function stripQuery(s) {
@@ -51,7 +51,7 @@
 	}
 
 	function changed(hash) {
-		return (hash && hash != 'false' && hash != historyCurrentHash);
+		return (hash && hash != 'false' && hash != _current);
 	}
 
 
@@ -67,12 +67,12 @@
 			return;
 
 		$.history.save (hash, true);
-		invokeCallback ();
+		invoke ();
 	}
 
 	$.history = {
 		init: function (callback) {
-			historyCallback = callback;
+			_callback = callback;
 
 			var hash = stripQuery (location.hash);
 			if (hash == '')
@@ -92,7 +92,7 @@
 				return;
 
 			$.history.save (hash);
-			invokeCallback ();
+			invoke ();
 		},
 
 		save: function (hash, skipIframe) {
@@ -102,12 +102,10 @@
 				hash = '#' + hash;
 
 			if (!changed (hash)) {
-				$.log ("Skipping save of " + hash);
 				return;
 			}
 
-			$.log ("Saving " + hash);
-			historyCurrentHash = hash;
+			_current = hash;
 
 			location.hash = hash;
 
@@ -116,7 +114,7 @@
 		},
 
 		current: function () {
-			return historyCurrentHash;
+			return _current;
 		}
 	};
 
