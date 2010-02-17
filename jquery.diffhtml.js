@@ -68,7 +68,7 @@
     //
     //   - vjt  Thu Dec 10 22:08:23 CET 2009
     //
-    var parser = new DOMParser (); // FIXME: IE does not support this, and uses an ActiveXObject.
+    var parser = new DOMParser (); // IE uses the brige defined below.
 
     var docA = parser.parseFromString('<w>' + a + '</w>', 'text/xml');
     var docB = parser.parseFromString('<w>' + b + '</w>', 'text/xml');
@@ -127,5 +127,34 @@
 
       return result;
     });
+  };
+
+  /**
+   * Quick&dirty DOMParser bridge vs Microsoft.XMLDOM
+   */
+  if (!window.DOMParser) {
+    window.DOMParser = function () {
+      this.init = function () { return false; }
+
+      this.parseFromString = function (text) {
+        try {
+          var doc = new ActiveXObject ('Microsoft.XMLDOM');
+          doc.async = false;
+          doc.loadXML (text);
+
+          return doc;
+        } catch (e) {
+          throw ('DOMParser initialization error: ' + e.message);
+        }
+      };
+
+      this.parseFromBuffer = function (buffer) {
+        return this.parseFromString (buffer);
+      };
+
+      this.parseFromStream = function (stream) {
+        throw ('Not implemented');
+      }
+    };
   };
 })();
