@@ -13,9 +13,7 @@
 
 (function ($) {
 
-	var historyCurrentHash, historyCallback, historyNeedIframe;
-
-	historyNeedIframe = $.browser.msie && ($.browser.version < 8 || document.documentMode < 8);
+	var historyCurrentHash, historyCallback;
 
 	var iframe;
 	function iframe_init(hash) {
@@ -58,39 +56,27 @@ $.extend({
 		historyCallback = callback;
 
 		var hash = stripQuery(location.hash);
+		if (hash == '')
+			hash = '#';
 		
-		if (historyNeedIframe) {
-			// To stop the callback firing twice during initilization if no hash present
-			if (hash == '')
-				hash = '#';
-
-			iframe_init();
-			$.historySave(hash);
-		}
-
-		invokeCallback();
+		if ($.browser.msie && ($.browser.version < 8 || document.documentMode < 8))
+			iframe_init(hash);
+		else if ($.browser.opera)
+			history.navigationMode = 'compatible';
 
 		setInterval($.historyCheck, 100);
 	},
 
 	historyCheck: function(){
-		if (historyNeedIframe) {
-			// On IE, check for location.hash of iframe
-			var hash = iframe_get();
+		var hash;
 
-			if (hash != $.historyCurrent()) {
-				$.historySave(hash);
-				invokeCallback();
-			}
-		} else {
-			// otherwise, check for location.hash
-			var hash = stripQuery(location.hash);
+		if (iframe)
+			hash = stripQuery(iframe_get());
+		else
+			hash = stripQuery(location.hash);
 
-			if (hash != $.historyCurrent()) {
-				$.historySave(hash);
-				invokeCallback();
-			}
-		}
+		$.historySave(hash);
+		invokeCallback();
 	},
 
 	historyLoad: function(hash){
@@ -106,11 +92,7 @@ $.extend({
 
 		historyCurrentHash = hash;
 		
-		if (historyNeedIframe) {
-			iframe_set(hash);
-		} else {
-			location.hash = hash;
-		}
+		location.hash = hash;
 
 		return historyCurrentHash;
 	},
