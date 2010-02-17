@@ -14,35 +14,6 @@
 (function ($) {
   var _current, _callback;
 
-  function invoke () {
-    if (_current)
-      _callback (_current.replace(/^#/, ''));
-  }
-
-  function stripQuery(s) {
-    return s.replace(/\?.*$/, '');
-  }
-
-  function changed(hash) {
-    return (hash && hash != 'false' && hash != _current);
-  }
-
-
-  function monitor () {
-    var hash;
-
-    if (iframe)
-      hash = stripQuery (iframe_get ());
-    else
-      hash = stripQuery (location.hash);
-
-    if (!changed (hash))
-      return;
-
-    $.history.save (hash, true);
-    invoke ();
-  }
-
   $.history = {
     init: function (callback) {
       _callback = callback;
@@ -57,7 +28,21 @@
       else if ($.browser.opera)
         history.navigationMode = 'compatible';
 
-      setInterval (monitor, 100);
+      setInterval (function () {
+        var hash;
+
+        if (_iframe.inited)
+          hash = stripQuery (_iframe.get ());
+        else
+          hash = stripQuery (location.hash);
+
+        if (!changed (hash))
+          return;
+
+        $.history.save (hash, true);
+        invoke ();
+
+      }, 100);
     },
 
     load: function (hash) {
@@ -140,4 +125,19 @@
       doc.close();
     }
   };
+
+  var invoke = function () {
+    if (_current)
+      _callback (_current.replace(/^#/, ''));
+  };
+
+  var stripQuery = function (s) {
+    return s.replace(/\?.*$/, '');
+  }
+
+  var changed = function (hash) {
+    if (hash && hash != 'false' && hash != _current)
+      return true;
+  }
+
 })(jQuery);
