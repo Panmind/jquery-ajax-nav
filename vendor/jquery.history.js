@@ -12,34 +12,7 @@
  */
 
 (function ($) {
-
   var _current, _callback;
-
-  var iframe;
-
-  function iframe_init(hash) {
-    iframe = $('#ie_history')[0];
-  }
-
-  function iframe_set(hash) {
-    try {
-      var doc = iframe.contentWindow.document;
-
-      doc.open();
-      doc.write('<html><body>' + hash + '</body></html>');
-      doc.close();
-
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  function iframe_get() {
-    try {
-      return iframe.contentWindow.document.body.innerText;
-    } catch (e) { return ''; }
-  }
 
   function invoke () {
     if (_current)
@@ -79,7 +52,7 @@
         hash = '#';
 
       if ($.browser.msie && ($.browser.version < 8 || document.documentMode < 8))
-        iframe_init (hash);
+        _iframe.init (_current);
 
       else if ($.browser.opera)
         history.navigationMode = 'compatible';
@@ -109,8 +82,8 @@
 
       location.hash = hash;
 
-      if (iframe && !skipIframe)
-        iframe_set (hash);
+      if (_iframe.inited && !skipIframe)
+        _iframe.set (hash);
     },
 
     current: function () {
@@ -118,4 +91,53 @@
     }
   };
 
+  //////////// Private ///////////////
+
+  var _iframe = {
+    init: function (hash) {
+      this.element = $('#ie_history')[0];
+
+      if (this.element.length == 0)
+        throw ('BUG: no "ie_history" element ID found in DOM!');
+
+      if (this.element.src != 'javascript:false')
+        throw ('BUG: the "ie_history" iFrame MUST have a src="javascript:false"');
+
+      this.inited = true;
+    },
+
+    set: function (hash) {
+      try {
+        /* After initialization, IE doesn't save the current page,
+         * but if it is saved DURING initialization, previous history
+         * is lost. So we update the iFrame twice here, to preserve
+         * the page visualized during initialization.
+         */
+        if (this.get () == 'false')
+          this.write (_current);
+
+        this.write (hash);
+        return true;
+
+      } catch (e) {
+        return false;
+      }
+    },
+
+    get: function () {
+      try {
+        return this.element.contentWindow.document.body.innerText;
+      } catch (e) {
+        return '';
+      }
+    },
+
+    write: function (hash) {
+      var doc = this.element.contentWindow.document;
+
+      doc.open();
+      doc.write('<html><body>' + hash + '</body></html>');
+      doc.close();
+    }
+  };
 })(jQuery);
