@@ -50,6 +50,10 @@
 		return s.replace(/\?.*$/, '');
 	}
 
+	function changed(hash) {
+		return (hash && hash != 'false' && hash != historyCurrentHash);
+	}
+
 $.extend({
 
 	historyInit: function(callback){
@@ -75,11 +79,17 @@ $.extend({
 		else
 			hash = stripQuery(location.hash);
 
+		if (!changed(hash))
+			return;
+
 		$.historySave(hash);
 		invokeCallback();
 	},
 
 	historyLoad: function(hash){
+		if (!changed(hash))
+			return;
+
 		$.historySave(hash);
 		invokeCallback();
 	},
@@ -89,6 +99,10 @@ $.extend({
 
 		if (hash[0] != '#')
 			hash = '#' + hash;
+
+		if (!changed(hash)) {
+			return;
+		}
 
 		historyCurrentHash = hash;
 		
