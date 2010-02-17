@@ -17,10 +17,7 @@
   $.history = {
     init: function (callback) {
       _callback = callback;
-
-      var hash = stripQuery (location.hash);
-      if (hash == '')
-        hash = '#';
+      _current  = '#' + location.hash.replace (/^#/, '');
 
       if ($.browser.msie && ($.browser.version < 8 || document.documentMode < 8))
         _iframe.init (_current);
@@ -59,16 +56,15 @@
       if (!hash.match (/^#/))
         hash = '#' + hash;
 
-      if (!changed (hash)) {
+      if (!changed (hash))
         return;
-      }
-
-      _current = hash;
 
       location.hash = hash;
 
       if (_iframe.inited && !skipIframe)
         _iframe.set (hash);
+
+      _current = hash;
     },
 
     current: function () {
