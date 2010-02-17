@@ -246,7 +246,7 @@ difflib = {
 	
 			var i1 = j1 = k1 = block = 0;
 			var non_adjacent = [];
-			for (var idx in matching_blocks) {
+			for (var idx = 0; idx < matching_blocks.length; idx++) {
 				block = matching_blocks[idx];
 				i2 = block[0];
 				j2 = block[1];
@@ -276,7 +276,7 @@ difflib = {
 			this.opcodes = answer;
 			var block, ai, bj, size, tag;
 			var blocks = this.get_matching_blocks();
-			for (var idx in blocks) {
+			for (var idx = 0; idx < blocks.length; idx++) {
 				block = blocks[idx];
 				ai = block[0];
 				bj = block[1];
@@ -327,7 +327,7 @@ difflib = {
 	
 			var nn = n + n;
 			var groups = [];
-			for (var idx in codes) {
+			for (var idx = 0; idx < codes.length; idx++) {
 				code = codes[idx];
 				tag = code[0];
 				i1 = code[1];
