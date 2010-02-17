@@ -39,9 +39,11 @@
   // Recursive reducer -- see below for an explanation
   //
   var toTokens = function (result, node) {
+    var textContent = node.textContent || node.text; // .text for IE. DAMN IE.
+
     if (node.tagName  // Standalone tag, like <br/>
-        && node.textContent.length == 0
-        && node.childNodes.length == 0) {
+        && (!textContent     || textContent.length == 0)
+        && (!node.childNodes || node.childNodes.length == 0)) {
       result.push ('<' + node.tagName + '/>');
       return result;
     }
@@ -52,7 +54,7 @@
     var text;
     if (node.childNodes && node.childNodes.length > 0)
       result = result.concat (_(node.childNodes).reduce ([], toTokens)); // Recursion
-    else if (text = $.trim (node.textContent))
+    else if (text = $.trim (textContent))
       result = result.concat (text.split (/\s+/));
 
     if (node.tagName)
