@@ -353,7 +353,7 @@ $.navLoadContent = function (loader, options) {
  *
  */
 $.fn.navLink = function (options) {
-  options = __validateOptions (options);
+  options = __validateOptions (options, this);
 
   var listener = function () {
     var link = $(this);
@@ -392,16 +392,15 @@ $.fn.navLink = function (options) {
  *    POST them.
  */
 $.fn.navForm = function (options) {
-  options = __validateOptions (options);
+  options = __validateOptions (options, this);
 
   var listener = function () {
     var form = $(this);
     var args = $.clone (options);
     var data = form.serialize ();
 
-    if (!args.method) {
+    if (!args.method)
       args.method = (form.attr ('method') || 'post').toLowerCase ();
-    }
 
     args.href = form.attr ('action');
 
@@ -563,7 +562,7 @@ var __onHistoryChange = function (path, options) {
  * @param options Object: the options to be validated.
  *
  */
-var __validateOptions = function (options) {
+var __validateOptions = function (options, element) {
   var defaults = $.clone ($.navDefaultOptions);
 
   options = $.extend (defaults, options);
@@ -581,6 +580,8 @@ var __validateOptions = function (options) {
 
   if (typeof (options.container) == 'string')
     options.container = $(options.container);
+  else if (typeof (options.container) == 'function')
+    options.container = options.container.apply (element);
 
   if (options.container.size () > 1)
     throw ('BUG: the container MUST be an unique element');
