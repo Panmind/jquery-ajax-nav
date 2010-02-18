@@ -423,7 +423,7 @@ $.fn.navForm = function (options) {
       throw (
         "Unluckily, the .live () method does not work on the " +
         "submit event on IE. You must pass live:false and re-" +
-        "apply the navForm () on each ajaxReady ()."
+        "apply the navForm () on each ajaxReady (). OR YOU CAN UPDATE TO JQUERY 1.4."
       );
 
     $(this)
