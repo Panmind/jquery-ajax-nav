@@ -418,12 +418,22 @@ $.fn.navForm = function (options) {
     return false;
   };
 
-  if (options.live)
-    $(this).live ('submit', listener)
+  if (options.live) {
+    if ($.browser.msie)
+      throw (
+        "Unluckily, the .live () method does not work on the " +
+        "submit event on IE. You must pass live:false and re-" +
+        "apply the navForm () on each ajaxReady ()."
+      );
+
+    $(this)
+      .live ('submit', listener)
       .live ('ajaxSubmit', listener);
-  else
-    $(this).bind ('submit', listener)
+  } else {
+    $(this)
+      .bind ('submit', listener)
       .bind ('ajaxSubmit', listener);
+  }
 
   return this;
 };
