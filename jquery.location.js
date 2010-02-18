@@ -38,11 +38,8 @@ $.location = new (function () { // Inline object creation and initialization
   // The anchor "section" schema
   var SectionSchema = /^\/?(\w+)\/?.*/;
 
-  // The path schema, to be matched on the full URI
-  var PathSchema    = /^\w+:\/\/[^\/]+/;
-
   // Self-explanatory
-  var URI, Anchors;
+  var Host, Path, URI, Anchors;
 
   /**
    * Sets the current location of the document. If the history plugin is
@@ -115,12 +112,21 @@ $.location = new (function () { // Inline object creation and initialization
   };
 
   /**
+   * Gets the current document protocol + host, without path or anchors.
+   *
+   * @return String: like https://localhost:3000/
+   */
+  this.getHost = function () {
+    return Host;
+  };
+
+  /**
    * Gets the current document path, without URI or anchors
    *
    * @return String
    */
   this.getPath = function () {
-    return URI.replace (PathSchema, '');
+    return Path;
   };
 
   /**
@@ -181,12 +187,11 @@ $.location = new (function () { // Inline object creation and initialization
    * @return undefined
    */
   this.__save = function () { // Private
-    var href = document.location.href;
-
-    URI     = href.replace (/#.*$/, ''); /// XXX move these into the schema
-    Anchors = href.match (/#/) ? href.replace (/^.*#/, '') : '';
-
-    // $.log ("Saving " + href + " as " + URI + "#" + Anchors);
+    var loc = document.location;
+    Host    = loc.protocol + '//' + loc.host;
+    Path    = loc.pathname;
+    URI     = Host + Path;
+    Anchors = loc.hash.replace (/^#/, '')
   };
 });
 
