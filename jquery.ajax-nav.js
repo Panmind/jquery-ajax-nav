@@ -227,6 +227,9 @@ $.navLoadContent = function (loader, options) {
   var method = (options.method || 'get').toLowerCase ();
   var response = null, error = null;
 
+  if (typeof (options.container) == 'function')
+    options.container = options.container.apply (loader);
+
   // Uhm. This could be heavy, and should be moved into a separate function
   // called by both navForm () and navLink ().
   //
@@ -574,18 +577,16 @@ var __validateOptions = function (options, element) {
   if (typeof (options) == 'undefined')
     throw ('BUG: no option passed to a navigation link');
 
-  if (!options.container)
-    throw ('BUG: navigation links MUST refer to a target container');
-
   if (!options.base)
     throw ('BUG: navigation links MUST have a configured base path');
 
+  if (!options.container)
+    throw ('BUG: navigation links MUST refer to a target container');
+
   if (typeof (options.container) == 'string')
     options.container = $(options.container);
-  else if (typeof (options.container) == 'function')
-    options.container = options.container.apply (element);
 
-  if (options.container.size () > 1)
+  if (typeof (options.container) != 'function' && options.container.size () > 1)
     throw ('BUG: the container MUST be an unique element');
 
   // Set the "live" option to "true" if it's undefined
