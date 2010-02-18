@@ -91,6 +91,12 @@
  *               is true, the container is replaced with the server
  *               response (using .replaceWith ()).
  *
+ *  - append:    Boolean (optional, default: false)
+ *               if true, the response is appended to the container HTML
+ *
+ *  - prepend:   Boolean (optional, default: false)
+ *               if true, the response is prepended to the container HTML
+ *
  *  - root:      String (optional)
  *               the default URL path to load upon initialization,
  *               if no anchor is requested by the user.
@@ -312,6 +318,10 @@ $.navLoadContent = function (loader, options) {
         } else {
           if (options.replace)
             options.container.replaceWith (response);
+          else if (options.append)
+            options.container.append (response);
+          else if (options.prepend)
+            options.container.prepend (response);
           else
             options.container.html (response);
         }
