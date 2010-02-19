@@ -1,4 +1,4 @@
-// Panmind Wenlock - (C) 2009 Mind2Mind S.r.L.
+// Panmind Pridoli - (C) 2009-2010 Mind2Mind S.r.L.
 //
 
 /**
@@ -8,30 +8,35 @@
  * The public API are the .navLink () and .navForm () methods, that
  * attach to the matched jQuery elements the AJAX loading behaviour.
  *
- * When the content starts loading, a custom "pm:contentUnloading"
- * event is triggered on the whole document, unless this is the
- * first page load (as determined by history).
+ * When the content starts loading, a custom "nav:unloading" event
+ * is triggered on the document, unless this is the first page load
+ * load (as determined by history).
  *
- * When the content is loaded, another custom "pm:contentLoaded"
- * event is triggered on the whole document, again: conceptually
- * equivalent to jQuery's .ready () event.
+ * When the content is loaded, another custom "nav:loaded" event is
+ * triggered on the whole document, again: conceptually equivalent to
+ * jQuery's .ready () event.
+ *
+ * To listen on these events, the helpers `ajaxReady` and `ajaxUnload`
+ * help bindign event handlers without specifying their names. Also,
+ * the `ajaxInit` helper binds to the "nav:loaded" event using .one().
  *
  * To optimize loading, listeners that can be bound using .live ()
  * SHOULD be initialized into a
  *
- *   $(document).one ('pm:contentLoaded', function () { ... });
+ *   $(document).ajaxInit (function () { ... });
  *
  * listeners that instead must be bound without .live () (e.g. for
  * the mouseenter/mouseleave events) MUST be initialized into a
  *
- *   $(document).bind ('pm:contentLoaded', function () { ... });
+ *   $(document).ajaxReady (function () { ... });
  *
  * listeners that do clean-ups of the page, stop timers, etc, MUST
  * be initialized into a
  *
- *   $(document).bind ('pm:contentUnloading', function () { ... });
+ *   $(document).ajaxUnload (function () { ... });
  *
  * navLink ()/navForm () are bound using .live () by default.
+ *
  *
  * The big picture
  * ===============
@@ -56,7 +61,7 @@
  * Specialized code
  * ----------------
  *
- *   $(document).one ('pm:contentLoaded', function () {
+ *   $(document).ajaxInit (function () {
  *     $('a.nav').navLink ();
  *     $('#foo').navForm ();
  *   });
@@ -108,11 +113,10 @@
  *               page inherit the AJAX load behaviour.
  *
  *  - noEvents:  Boolean (optional, default: false)
- *               if true, no pm:contentLoaded event is triggered
- *               upon load completion nor a pm:contentUnloading is
- *               fired when loading start. Useful for light actions
- *               that alter just a single, isolated element of
- *               the page.
+ *               if true, no nav:loaded event is triggered upon load
+ *               load completion nor a nav:unloading is fired when
+ *               loading start. Useful for light actions that alter
+ *               just a single, isolated element of the page.
  *
  *  - noHistory: Boolean (optional, default: false)
  *               do not alter history after a successful load.
@@ -209,7 +213,7 @@ $.navDefaultOptions = {};
  *    the container is updated with the bare "Error XXX" string.
  *    THIS IS TEMPORARY! :-)
  *    defined
- *  - Triggers the 'pm:contentLoaded' event on the whole document
+ *  - Triggers the 'nav:loaded' event on the whole document
  *  - Opaques the `container`
  *
  * @param loader jQuery:  The trigger of this AJAX load
@@ -260,17 +264,15 @@ $.navLoadContent = function (loader, options) {
     url    : options.href,
     data   : options.params,
 
-    // Dim the container, trigger pm:contentUnloading on the document,
-    // call the `loading` callback and log debug details to the console
+    // Dim the container, trigger nav:unloading on the document, call the
+    // `loading` callback and log debug details to the console.
     //
     beforeSend: function (xhr) {
       if (!options.noDisable)
         options.container.dim ();
 
-      if ($.history.current () && !options.noEvents) {
-        // $.log ('triggering pm:contentUnloading');
-        $(document).trigger ('pm:contentUnloading');
-      }
+      if ($.history.current () && !options.noEvents)
+        $(document).trigger ('nav:unloading');
 
       __invoke ('loading', options, loader);
 
@@ -335,10 +337,8 @@ $.navLoadContent = function (loader, options) {
 
         __invoke ('success', options, loader)
 
-        if (!options.noEvents) {
-          // $.log ('triggering pm:contentLoaded');
-          $(document).trigger ('pm:contentLoaded');
-        }
+        if (!options.noEvents)
+          $(document).trigger ('nav:loaded');
 
       } else if (error) {
         // Something went wrong, call user-defined callbacks
@@ -541,6 +541,30 @@ $.navHijack = function () {
 
   return true;
 };
+
+
+/**
+ * Event registering syntactic sugar:
+ *
+ * Registers a callback to be run ONCE upon initialization
+ */
+$.fn.ajaxInit = function (fn) {
+  return $(document).one ('nav:loaded', fn);
+};
+
+/**
+ * Registers a callback to be run ALWAYS after content loaded
+ */
+$.fn.ajaxReady = function (fn) {
+  return $(document).bind ('nav:loaded', fn);
+};
+
+/**
+ * Registers a callback to be run ALWAYS after content unloaded
+ */
+$.fn.ajaxUnload = function (fn) {
+  return $(document).bind ('nav:unloading', fn);
+}
 
 /**
  * *Private*: this function gets called when history
