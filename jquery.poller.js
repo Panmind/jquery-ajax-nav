@@ -6,11 +6,12 @@ var Poller = function (options) {
   var type = options.type || 'POST';
   var dataType = options.dataType || null;
   var dataFunc = options.dataFunc || function () { return form.serialize (); }
+  var xhr = null;
 
   var poll = function () {
     var self = this;
 
-    $.ajax ({
+    xhr = $.ajax ({
       url : url,
       type: type,
       data: dataFunc.apply (this, [form]),
@@ -39,6 +40,9 @@ var Poller = function (options) {
   };
 
   this.stop = function () {
+    if (xhr)
+      xhr.abort ();
+
     if (id) {
       this.log ('stopping');
       window.clearInterval (id);
