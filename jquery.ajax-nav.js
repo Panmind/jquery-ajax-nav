@@ -257,6 +257,9 @@ $.navLoadContent = function (loader, options) {
     }
   }
 
+  if ($.history.current () && !options.noEvents)
+    $(document).trigger ('nav:unloading');
+
   // Let's begin the party...
   //
   $.ajax ({
@@ -270,9 +273,6 @@ $.navLoadContent = function (loader, options) {
     beforeSend: function (xhr) {
       if (!options.noDisable)
         options.container.dim ();
-
-      if ($.history.current () && !options.noEvents)
-        $(document).trigger ('nav:unloading');
 
       __invoke ('loading', options, loader);
 
