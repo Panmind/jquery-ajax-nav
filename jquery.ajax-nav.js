@@ -564,7 +564,15 @@ $.fn.ajaxReady = function (fn) {
  */
 $.fn.ajaxUnload = function (fn) {
   return $(document).bind ('nav:unloading', fn);
-}
+};
+
+/**
+ * Registers a callback to be run when this element receives
+ * the "ajaxSubmit" event.
+ */
+$.fn.ajaxSubmit = function (fn) {
+  return $(this).bind ('submit', fn).bind ('ajaxSubmit', fn);
+};
 
 /**
  * *Private*: this function gets called when history
