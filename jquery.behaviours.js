@@ -292,6 +292,8 @@ $('.tabber a').live ('click', function () {
     if (!rollover.data ('element'))
       rollover.data('element', rollover.hierarchyFind (selector));
 
+    rollover.data ('to_hide', rollover.find ('.toHide'));
+
     return $(rollover.data ('element'));
   }
 
@@ -309,6 +311,10 @@ $('.tabber a').live ('click', function () {
     else
       rollovee.show ();
 
+    var to_hide = rollover.data ('to_hide');
+    if (to_hide.length > 0)
+      to_hide.hide ();
+
   }).live ('mouseout', function () {
     var rollover = $(this);
     var rollovee = initialize (rollover);
@@ -317,6 +323,10 @@ $('.tabber a').live ('click', function () {
       rollovee.fadeOut ();
     else
       rollovee.hide ();
+
+    var to_hide = rollover.data ('to_hide');
+    if (to_hide.length > 0)
+      to_hide.show ();
 
   });
 })();
