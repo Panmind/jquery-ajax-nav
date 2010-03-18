@@ -202,6 +202,78 @@ $('.toggler.autoCloser').live ('afterToggle', function (event) {
   $(document).bind ('mousemove', {area: data.area, toggler: toggler}, data.handler);
 });
 
+$(function () {
+  /**
+   * The Cycler
+   *
+   * Given this markup:
+   *
+   * <div id="antani">
+   *   <div class="content"> ... </div>
+   *   <div class="content"> ... </div>
+   *   <div class="content"> ... </div>
+   * </div>
+   * <div class="cycler" rel="#antani"></div>
+   *
+   * The cycler will hide all but the first .content element and generate
+   *
+   * <ul>
+   *   <li><a href="#" class="selected">1</a></li>
+   *   <li><a href="#">2</a></li>
+   *   <li><a href="#">3</a></li>
+   * </ul>
+   *
+   * inside the .cycler container and add a click handler on each link to
+   * show the corresponding .content element via a slide effect, taking
+   * care of directions.
+   */
+  $('.cycler').each (function () {
+    var controller = $(this);
+    var target     = controller.hierarchyFind (controller.attr ('rel'));
+
+    if (target.length == 0)
+      $.behaviourError (this, 'no "rel" attribute defined on the cycler!');
+
+    // Hide nothing but the first element
+    //
+    target.children (':gt(0)').hide ();
+
+    // Generate activation links
+    //
+    var slides = target.children ();
+    var links  = $('<ul />');
+
+    slides.each (function (i) {
+      var link  = $('<a href="#">' + (i+1) + '</a>');
+      var slide = $(this);
+
+      slide.data ('cycleidx', i);
+
+      link.click (function () {
+        var hide = target.children (':not(:eq('+i+')):visible');
+        if (hide.length == 0)
+          return false;
+
+        var show = target.children (':eq('+i+')');
+        var direction = (hide.data ('cycleidx') > i) ? 'right' : 'left';
+
+        hide.effect ('slide', {mode: 'hide', direction: direction});
+        show.effect ('slide', {direction: direction == 'right' ? 'left' : 'right'});
+
+        links.removeClass ('selected');
+        $(this).addClass ('selected');
+
+        return false;
+      });
+
+      $('<li/>').append (link).appendTo (links);
+    });
+
+    links.appendTo (controller);
+    links = links.find ('a');
+    links.first ().addClass ('selected');
+  });
+})
 
 // The asker
 $('.asker').live ('click', function () {
