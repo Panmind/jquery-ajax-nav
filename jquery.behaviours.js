@@ -60,26 +60,24 @@ $.fn.slider = function () {
   return $(this).hasClass ('slider');
 };
 
-(function () {
-  // Fade toggling
-  //
-  // Implemented directly, with a predefinite speed
-  // ("fast").
-  //
-  $.fn.fadeToggle = function () {
-    var speed = arguments[0] || 'fast';
-    var after = arguments[1];
+// Fade toggling
+//
+// Implemented directly, with a predefinite speed
+// ("fast").
+//
+$.fn.fadeToggle = function () {
+  var speed = !$.isFunction (arguments[0]) && arguments[0] || 'fast';
+  var after = $.isFunction (arguments[0]) && arguments[0] || arguments[1];
 
-    return this.each (function () {
-      var element = $(this)
+  return this.each (function () {
+    var element = $(this)
 
-      if (element.is (':hidden'))
-        element.fadeIn (speed, after);
-      else
-        element.fadeOut (speed, after);
-    });
-  };
-})();
+    if (element.is (':hidden'))
+      element.fadeIn (speed, after);
+    else
+      element.fadeOut (speed, after);
+  });
+};
 
 // The toggler
 $('.toggler').live ('click', function () {
