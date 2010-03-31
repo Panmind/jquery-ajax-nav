@@ -109,10 +109,24 @@ $('.toggler').live ('click', function () {
     });
   };
 
+  // Because, as http://api.jquery.com/fadeOut/ states,
+  // the callbacks passed to animations are invoked ONCE
+  // FOR EACH ELEMENT, thus the afterToggle would have
+  // been invoked N times if we're toggling N elements.
+  //
+  var animateToggle = function (effect) {
+    if (togglee.length > 1) {
+      togglee.slice (0, -1)[effect] ();
+      togglee.last ()[effect] (afterToggle);
+    } else {
+      togglee[effect] (afterToggle);
+    }
+  };
+
   if (toggler.slider ())
-    togglee.slideToggle (afterToggle);
+    animateToggle ('slideToggle');
   else if (toggler.fader ())
-    togglee.fadeToggle (afterToggle);
+    animateToggle ('fadeToggle');
   else {
     togglee.toggle ();
     afterToggle ();
