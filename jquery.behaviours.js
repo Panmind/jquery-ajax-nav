@@ -61,20 +61,6 @@ $.fn.slider = function () {
 };
 
 (function () {
-  // Slide toggling
-  //
-  // Overwrite jQuery's one, with a simple wrapper
-  // with a predefinite speed ("fast")
-  //
-  var slideToggle = $.fn.slideToggle;
-  $.fn.slideToggle = function () {
-    var element = $(this);
-    var speed   = arguments[0] || 'fast';
-    var after   = arguments[1];
-
-    return slideToggle.apply (this, [speed, after]);
-  };
-
   // Fade toggling
   //
   // Implemented directly, with a predefinite speed
