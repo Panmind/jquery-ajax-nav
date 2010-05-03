@@ -257,7 +257,7 @@ $.navLoadContent = function (loader, options) {
     }
   }
 
-  if ($.history.current () && !options.noEvents)
+  if (!options.noHistory && $.history.current () && !options.noEvents)
     $(document).trigger ('nav:unloading');
 
   // Let's begin the party...
@@ -486,13 +486,15 @@ $.navInit = function () {
 
   // $.log ('AJAX nav init: found the "' + container + '" container');
 
-  // Initialize the jquery.history plugin
-  //
-  $.history.init (__onHistoryChange);
+  if (!$.navDefaultOptions.noHistory) {
+    // Initialize the jquery.history plugin
+    //
+    $.history.init (__onHistoryChange);
 
-  // Load the anchor currently in the URL bar
-  //
-  $.history.load ($.location.getAnchors () || $.navDefaultOptions.root);
+    // Load the anchor currently in the URL bar
+    //
+    $.history.load ($.location.getAnchors () || $.navDefaultOptions.root);
+  }
 
   // $.log ('AJAX navigation initialized and ready to roll');
 };
