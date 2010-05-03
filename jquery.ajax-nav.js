@@ -452,6 +452,9 @@ $.fn.navForm = function (options) {
  * TODO: Documentation
  */
 $.navInit = function () {
+  if (arguments[0])
+    $.navDefaultOptions = arguments[0];
+
   // Initialize the base path
   //
   var base = $.location.getPath ();
