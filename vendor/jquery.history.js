@@ -59,15 +59,15 @@
 		var hash;
 
 		if (iframe)
-			hash = stripQuery(iframe_get());
+			hash = stripQuery (iframe_get ());
 		else
-			hash = stripQuery(location.hash);
+			hash = stripQuery (location.hash);
 
-		if (!changed(hash))
+		if (!changed (hash))
 			return;
 
-		$.history.save(hash, true);
-		invokeCallback();
+		$.history.save (hash, true);
+		invokeCallback ();
 	}
 
 	$.history = {
