@@ -32,13 +32,6 @@
  *   - vjt  Tue Nov 10 11:39:05 CET 2009
  */
 $.location = new (function () { // Inline object creation and initialization
-  // The anchor + query string parameters schema
-  var AnchorSchema  = /(^\/.*#)?([\w\.\/]+)([\d\s\w%:;=\[\]\\\"\+,]+)?/;
-
-  // The anchor "section" schema
-  var SectionSchema = /^\/?(\w+)\/?.*/;
-
-  // Self-explanatory
   var Host, Path, URI, Anchors;
 
   /**
@@ -76,21 +69,8 @@ $.location = new (function () { // Inline object creation and initialization
    *
    * @return the anchor that was set
    */
-  this.setAnchor = function (href) {
-    // If the href is empty or doesn't start with a /,
-    // add it cleverly.
-    //
-    if (!/^\//.test (href))
-      href = '/' + (href || '');
-
-    var anchor = href
-      .replace (/^\//, '#')
-      .replace (/\?/,  ':')
-      .replace (/\&/,  ';');
-
+  this.setAnchor = function (anchor) {
     this.set (URI + anchor);
-
-    return anchor;
   };
 
   /**
@@ -138,48 +118,29 @@ $.location = new (function () { // Inline object creation and initialization
     return Anchors;
   };
 
-  /**
-   * Gets the current "section", extracting it from the anchors
-   *
-   * @return String
-   */
-  this.getAnchorSection = function () {
-    var anchors = arguments[0] || Anchors;
+  // TODO: Documentation
+  this.encodeAnchor = function (href) {
+    // If the href is empty or doesn't start with a /,
+    // add it cleverly.
+    //
+    if (!/^[\/#]/.test (href))
+      href = '/' + (href || '');
 
-    return (anchors.replace (SectionSchema, '$1'));
+    return decodeURIComponent (href
+      .replace (/^\//, '#')
+      .replace (/\?/,  ':')
+      .replace (/\&/g, ';')
+    );
   };
 
-  /**
-   * If the current document anchor is in the format
-   *   #/foo/bar:baz=42
-   * returns "/foo/bar"
-   *
-   * @return String
-   */
-  this.getAnchorPath = function () {
-    var anchors = arguments[0] || Anchors;
-
-    return AnchorSchema.test (anchors)     ?
-      anchors.replace (AnchorSchema, '$2') :
-      anchors.replace ('#', '');
-  };
-
-  /**
-   * If the current document anchor is in the format
-   *   #/foo/bar:baz=42;example=yes
-   * returns "?baz=42&example=yes
-   *
-   * @return String
-   */
-  this.getAnchorParams = function () {
-    var anchors = arguments[0] || Anchors;
-
-    return (AnchorSchema.test (anchors)     ?
-      anchors.replace (AnchorSchema, '$3')  :
-      '')
-      .replace (/^:/, '?')
+  // TODO: Documentation
+  this.decodeAnchor = function (anchor) {
+    return anchor
+      .replace (/^#/, '/')
+      .replace (/:/, '?')
       .replace (/;/g, '&');
   };
+
 
   /**
    * Private: saves the current document location
