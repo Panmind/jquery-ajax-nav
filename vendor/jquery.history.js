@@ -17,18 +17,24 @@
 
 	historyNeedIframe = $.browser.msie && ($.browser.version < 8 || document.documentMode < 8);
 
-	var ihistory;
+	var iframe;
+
+	function iframe_init() {
+		// add hidden iframe for IE
+		iframe = $('<iframe src="javascript:false" style="display:none"/>');
+		$('body').prepend(iframe);
+		iframe = iframe[0];
+	}
 
 	function iframe_set(hash) {
-		var iframe = ihistory.contentWindow.document;
-		iframe.open();
-		iframe.close();
-		iframe.location.hash = hash;
+		var doc = iframe.contentWindow.document;
+		doc.open();
+		doc.close();
+		doc.location.hash = hash;
 	}
 
 	function iframe_get() {
-		var iframe = ihistory.contentDocument || ihistory.contentWindow.document;
-		return iframe.location.hash.replace(/\?.*$/, '');
+		return iframe.contentWindow.document.location.hash.replace(/\?.*$/, '');
 	}
 
 $.extend({
@@ -44,12 +50,7 @@ $.extend({
 			if (historyCurrentHash == '') {
 				historyCurrentHash = '#';
 			}
-		
-			// add hidden iframe for IE
-			$("body").prepend('<iframe id="$_history" style="display: none;"'+
-				' src="javascript:false;"></iframe>'
-			);
-			ihistory = $("#$_history")[0];
+			iframe_init();
 			iframe_set(current_hash);
 		}
 		else if ($.browser.safari) {
