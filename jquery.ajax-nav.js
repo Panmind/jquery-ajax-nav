@@ -317,8 +317,7 @@ $.navLoadContent = function (loader, options) {
         }
 
         if (method == 'get' && !options.noHistory) {
-          var strip = new RegExp ('(http(s)?://[^/]+)?' + options.base);
-          $.history.save (options.href.replace (strip, ''));
+          $.history.save (options.href.replace ($.navDefaultOptions.urlRE, ''));
         }
 
         __invoke ('success', options, loader)
@@ -449,7 +448,11 @@ $.navInit = function () {
       $.navDefaultOptions.base + "'"
     );
 
-  $.navDefaultOptions.base = base;
+  $.navDefaultOptions.base  = base;
+  $.navDefaultOptions.urlRE = new RegExp ( // For IE
+    '(' + $.location.getHost () + ')?' + base
+  );
+
   // $.log ('AJAX nav init: set base to "' + base + "'");
 
   // Initialize the default target container
