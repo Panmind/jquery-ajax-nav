@@ -17,6 +17,8 @@
 
 	historyNeedIframe = $.browser.msie && ($.browser.version < 8 || document.documentMode < 8);
 
+	var ihistory;
+
 $.extend({
 
 	historyInit: function(callback, src){
@@ -35,7 +37,7 @@ $.extend({
 			$("body").prepend('<iframe id="$_history" style="display: none;"'+
 				' src="javascript:false;"></iframe>'
 			);
-			var ihistory = $("#$_history")[0];
+			ihistory = $("#$_history")[0];
 			var iframe = ihistory.contentWindow.document;
 			iframe.open();
 			iframe.close();
@@ -66,7 +68,6 @@ $.extend({
 	historyCheck: function(){
 		if (historyNeedIframe) {
 			// On IE, check for location.hash of iframe
-			var ihistory = $("#$_history")[0];
 			var iframe = ihistory.contentDocument || ihistory.contentWindow.document;
 			var current_hash = iframe.location.hash.replace(/\?.*$/, '');
 
@@ -136,7 +137,6 @@ $.extend({
 		historyCurrentHash = newhash;
 		
 		if (historyNeedIframe) {
-			var ihistory = $("#$_history")[0];
 			var iframe = ihistory.contentWindow.document;
 			iframe.open();
 			iframe.close();
