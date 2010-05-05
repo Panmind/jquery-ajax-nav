@@ -3,8 +3,8 @@
 <head>
   <title>jQuery Ajax Navigation Framework Demonstration</title>
   <meta name="generator" value="vim"></meta>
-  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
-  <script type="text/javascript" src="../vendor/jquery.history.js"></script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+  <script type="text/javascript" src="../jquery.history.js"></script>
   <script type="text/javascript" src="../jquery.dim-opaque.js"></script>
   <script type="text/javascript" src="../jquery.utilities.js"></script>
   <script type="text/javascript" src="../jquery.location.js"></script>
@@ -13,17 +13,16 @@
   <script type="text/javascript">
     var spinner;
 
-    $.navDefaultOptions = {
-      container: '#container',
-      base     : /\/demo/,
-      loading  : function () { spinner.show (); },
-      success  : function () { spinner.hide (); }
-    };
-
     $(document).ready (function () {
       spinner = $('#spinner');
 
-      $.navInit ();
+      $.navInit ({
+        container: '#container',
+        base     : /\/demo/,
+        loading  : function () { spinner.show (); },
+        success  : function () { spinner.hide (); }
+      });
+
       $('a').navLink ();
     });
   </script>
