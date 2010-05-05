@@ -18,23 +18,29 @@
 	historyNeedIframe = $.browser.msie && ($.browser.version < 8 || document.documentMode < 8);
 
 	var iframe;
-
-	function iframe_init() {
-		// add hidden iframe for IE
-		iframe = $('<iframe src="javascript:false" style="display:none"/>');
-		$('body').prepend(iframe);
-		iframe = iframe[0];
+	function iframe_init(hash) {
+		iframe = $('#ie_history')[0];
 	}
 
 	function iframe_set(hash) {
-		var doc = iframe.contentWindow.document;
-		doc.open();
-		doc.close();
-		doc.location.hash = hash;
+		try {
+			var doc = iframe.contentWindow.document;
+
+			doc.open();
+			doc.write('<html><body>' + hash + '</body></html>');
+			doc.close();
+
+			$.log("iframe set to " + hash);
+			return true;
+		} catch (e) {
+			return false;
+		}
 	}
 
 	function iframe_get() {
-		return stripQuery(iframe.contentWindow.document.location.hash);
+		try {
+			return iframe.contentWindow.document.body.innerText;
+		} catch (e) { return ''; }
 	}
 
 	function invokeCallback() {
