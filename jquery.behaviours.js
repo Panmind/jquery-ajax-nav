@@ -224,6 +224,46 @@ $('.deleter').live ('click', function () {
   return false;
 });
 
+/**
+ * An ultra-simple tabber. Example markup follows, you can use
+ * any kind of jQuery selector in the rel="" attribute.
+ *
+ * <ul class="tabber fader" rel=".newElement">
+ *   <li class="active"><a href="#" rel="#newPost">New Post</a></li>
+ *   <li><a href="#" rel="#newLink">New Link</a></li>
+ *   <li><a href="#" rel="#newPhoto">New Photo</a></li>
+ *   <li><a href="#" rel="#newArticle">New Article</a></li>
+ *   <li><a href="#" rel="#newAudio">New Audio</a></li>
+ *   <li><a href="#" rel="#newVideo">New Video</a></li>
+ * </ul>
+ * <div id="newPost" class="newElement"> ... </div>
+ * <div id="newLink" class="hidden newElement"> ... </div>
+ * <div id="newPhoto" class="hidden newElement"> ... </div>
+ * <div id="newArticle" class="hidden newElement"> ... </div>
+ * <div id="newAudio" class="hidden newElement"> ... </div>
+ * <div id="newVideo" class="hidden newElement"> ... </div>
+ */
+$('.tabber a').live ('click', function () {
+  var link      = $(this);
+  var tabber    = link.parents ('.tabber');
+  var container = link.attr ('rel');
+  var others    = tabber.attr ('rel');
+
+  if (tabber.hasClass ('fader')) {
+    $(others).fadeOut ();
+    $(container).fadeIn ();
+  } else {
+    $(others).hide ();
+    $(container).show ();
+  }
+
+  tabber.children ().removeClass ('active');
+  link.parent ().addClass ('active');
+
+  return false;
+});
+
+
 // The rollover
 (function () {
   // Initialize the rollover, and save the referenced element
