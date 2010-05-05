@@ -138,6 +138,37 @@ $('.toggler').live ('click', function () {
   return bubble;
 });
 
+/**
+ * Toggler that loads its target via AJAX the first time.
+ * After loading it, the element becomes a standard toggler.
+ *
+ * Example markup:
+ *
+ * <a href="/milestones/42/edit" class="loadedToggler slider" rel="#milestone_42">Edit</a>
+ */
+$('.loadedToggler').live ('click', function () {
+  var toggler  = $(this);
+  var url      = toggler.attr ('href');
+  var selector = toggler.attr ('rel');
+  var toggled  = toggler.hierarchyFind (selector);
+
+  if (toggled.length != 2)
+    $.behaviourError (this, 'the loadedToggler needs 2 elements, only ' + toggled.length + ' found');
+
+  var container = toggled.slice (0, 1);
+  var dimmed    = toggled.slice (1, 2);
+
+  dimmed.dim ();
+  container.load (url, null, function (responseText, textStatus) {
+    toggler.trigger ('toggler:loaded', [container]);
+    toggler.removeClass ('loadedToggler').addClass ('toggler');
+    toggler.click ();
+    dimmed.opaque ();
+  });
+
+  return false;
+});
+
 // Autocloser-flavoured toggler: when toggling occurs, the area that circumscribes
 // both the toggler and the togglee is calculated. When the mouse leaves this area,
 // the toggler is automatically closed. Used primarirly in rich HTML selects.
