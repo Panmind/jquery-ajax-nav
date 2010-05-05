@@ -57,7 +57,7 @@ var Queue = function () {
   };
 
   this.remove = function (item) {
-    var removed = elements.indexOf (item);
+    var removed = $.inArray (item, elements);
 
     if (removed >= 0) {
       elements = $.grep (elements, function (_, idx) { return idx != removed });
