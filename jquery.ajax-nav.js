@@ -467,14 +467,11 @@ $.navInit = function () {
 
   // Initialize the jquery.history plugin
   //
-  $.history.init ($.navHistoryLoad);
+  $.history.init (__onHistoryChange);
 
   // Load the anchor currently in the URL bar
   //
-  var anchor = $.location.getAnchors ();
-
-  // $.log ('AJAX nav init: navigating to "' + anchor + '"');
-  $.navHistoryLoad (anchor);
+  $.history.load ($.location.getAnchors () || $.navDefaultOptions.root);
 
   // $.log ('AJAX navigation initialized and ready to roll');
 };
@@ -532,25 +529,20 @@ $.navHijack = function () {
 };
 
 /**
- * This function gets called when history changes,
- * and it gets passed the currently active anchor name.
+ * *Private*: this function gets called when history
+ * changes, and it gets passed a path extracted from
+ * the currently active anchor name.
  */
-$.navHistoryLoad = function (anchor, options) {
-  if (!anchor)
-    anchor = $.navDefaultOptions.root;
+var __onHistoryChange = function (path, options) {
+  if (!path)
+    path = $.navDefaultOptions.root;
 
-  var path    = $.location.getAnchorPath (anchor);
-  var params  = $.location.getAnchorParams (anchor);
-
-  //$.log (
-  //  'AJAX history: loading #' + anchor +
-  //  ' path['+path+'] params['+params+']'
-  //);
+  //$.log ('AJAX history: loading "' + path + '"');
 
   $.navLoadContent (window, {
     base     : $.navDefaultOptions.base,
     container: $.navDefaultOptions.container,
-    href     : $.navDefaultOptions.base + path + params
+    href     : $.navDefaultOptions.base + path
   });
 };
 
