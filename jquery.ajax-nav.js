@@ -332,7 +332,11 @@ $.navLoadContent = function (loader, options) {
         }
 
         if (method == 'get' && !options.noHistory) {
-          $.history.save (options.href.replace ($.navDefaultOptions.urlRE, ''));
+          var save = options.href.replace ($.navDefaultOptions.urlRE, '');
+          // Don't save into the history the parameter that informs the
+          // backend that this request comes from history.
+          //
+          $.history.save (save.replace (/[\?&]_h_=/, ''));
         }
 
         __invoke ('success', options, loader)
@@ -582,6 +586,12 @@ $.fn.ajaxSubmit = function (fn) {
 var __onHistoryChange = function (path, options) {
   if (!path)
     path = $.navDefaultOptions.root;
+  else {
+    // Inform the backend that this request comes from the history,
+    //
+    if (!/_h_/.test (path))
+      path += (/\?/.test (path) ? '&' : '?') + '_h_=';
+  }
 
   //$.log ('AJAX history: loading "' + path + '"');
 
