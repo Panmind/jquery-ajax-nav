@@ -19,6 +19,18 @@
 
 	var ihistory;
 
+	function iframe_set(hash) {
+		var iframe = ihistory.contentWindow.document;
+		iframe.open();
+		iframe.close();
+		iframe.location.hash = hash;
+	}
+
+	function iframe_get() {
+		var iframe = ihistory.contentDocument || ihistory.contentWindow.document;
+		return iframe.location.hash.replace(/\?.*$/, '');
+	}
+
 $.extend({
 
 	historyInit: function(callback, src){
@@ -38,10 +50,7 @@ $.extend({
 				' src="javascript:false;"></iframe>'
 			);
 			ihistory = $("#$_history")[0];
-			var iframe = ihistory.contentWindow.document;
-			iframe.open();
-			iframe.close();
-			iframe.location.hash = current_hash;
+			iframe_set(current_hash);
 		}
 		else if ($.browser.safari) {
 			// etablish back/forward stacks
@@ -68,8 +77,7 @@ $.extend({
 	historyCheck: function(){
 		if (historyNeedIframe) {
 			// On IE, check for location.hash of iframe
-			var iframe = ihistory.contentDocument || ihistory.contentWindow.document;
-			var current_hash = iframe.location.hash.replace(/\?.*$/, '');
+			var current_hash = iframe_get();
 
 			if(current_hash != historyCurrentHash) {
 			
@@ -137,10 +145,7 @@ $.extend({
 		historyCurrentHash = newhash;
 		
 		if (historyNeedIframe) {
-			var iframe = ihistory.contentWindow.document;
-			iframe.open();
-			iframe.close();
-			iframe.location.hash = newhash;
+			iframe_set(newhash);
 			$.lastHistoryLength = history.length;
 			if (call_back)
 				historyCallback(hash);
