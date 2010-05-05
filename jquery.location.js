@@ -82,6 +82,10 @@ $.location = new (function () { // Inline object creation and initialization
     return URI;
   };
 
+  this.getForTracking = function () {
+    return URI + '/' + this.decodeAnchor (Anchors);
+  };
+
   /**
    * Gets the current document location, with any anchors that may be set.
    *
@@ -140,7 +144,6 @@ $.location = new (function () { // Inline object creation and initialization
       .replace (/:/, '?')
       .replace (/;/g, '&');
   };
-
 
   /**
    * Private: saves the current document location
