@@ -54,24 +54,8 @@
 		return (hash && hash != 'false' && hash != historyCurrentHash);
 	}
 
-$.extend({
 
-	historyInit: function(callback){
-		historyCallback = callback;
-
-		var hash = stripQuery(location.hash);
-		if (hash == '')
-			hash = '#';
-		
-		if ($.browser.msie && ($.browser.version < 8 || document.documentMode < 8))
-			iframe_init(hash);
-		else if ($.browser.opera)
-			history.navigationMode = 'compatible';
-
-		setInterval($.historyCheck, 100);
-	},
-
-	historyCheck: function(){
+	function monitor () {
 		var hash;
 
 		if (iframe)
@@ -82,40 +66,58 @@ $.extend({
 		if (!changed(hash))
 			return;
 
-		$.historySave(hash, true);
+		$.history.save(hash, true);
 		invokeCallback();
-	},
-
-	historyLoad: function(hash){
-		if (!changed(hash))
-			return;
-
-		$.historySave(hash);
-		invokeCallback();
-	},
-
-	historySave: function(hash, skipIframe) {
-		hash = decodeURIComponent(stripQuery(hash))
-
-		if (!hash.match(/^#/))
-			hash = '#' + hash;
-
-		if (!changed(hash)) {
-			return;
-		}
-
-		historyCurrentHash = hash;
-		
-		location.hash = hash;
-
-		if (iframe && !skipIframe)
-			iframe_set(hash);
-	},
-
-	historyCurrent: function(){
-		return historyCurrentHash;
 	}
 
-});
+	$.history = {
+		init: function (callback) {
+			historyCallback = callback;
+
+			var hash = stripQuery (location.hash);
+			if (hash == '')
+				hash = '#';
+
+			if ($.browser.msie && ($.browser.version < 8 || document.documentMode < 8))
+				iframe_init (hash);
+
+			else if ($.browser.opera)
+				history.navigationMode = 'compatible';
+
+			setInterval (monitor, 100);
+		},
+
+		load: function (hash) {
+			if (!changed (hash))
+				return;
+
+			$.history.save (hash);
+			invokeCallback ();
+		},
+
+		save: function (hash, skipIframe) {
+			hash = decodeURIComponent (stripQuery (hash))
+
+			if (!hash.match (/^#/))
+				hash = '#' + hash;
+
+			if (!changed (hash)) {
+				$.log ("Skipping save of " + hash);
+				return;
+			}
+
+			$.log ("Saving " + hash);
+			historyCurrentHash = hash;
+
+			location.hash = hash;
+
+			if (iframe && !skipIframe)
+				iframe_set (hash);
+		},
+
+		current: function () {
+			return historyCurrentHash;
+		}
+	};
 
 })(jQuery);
