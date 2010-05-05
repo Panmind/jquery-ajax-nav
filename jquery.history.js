@@ -1,6 +1,6 @@
 /*
  * jQuery history plugin
- * 
+ *
  * sample page: http://www.mikage.to/jquery/jquery_history.html
  *
  * Copyright (c) 2006-2009 Taku Sano (Mikage Sawatari)
