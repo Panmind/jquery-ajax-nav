@@ -138,6 +138,30 @@ $('.toggler').live ('click', function () {
   return bubble;
 });
 
+// Autocloser-flavoured toggler: when toggling occurs, the area that circumscribes
+// both the toggler and the togglee is calculated. When the mouse leaves this area,
+// the toggler is automatically closed. Used primarirly in rich HTML selects.
+//
+$('.toggler.autoCloser').live ('afterToggle', function (event) {
+  var toggler = event.toggler, togglee = event.togglee, visible = event.visible;
+
+  if (visible)
+    return;
+
+  if (!toggler.data ('autoCloser:area'))
+    toggler.data ('autoCloser:area', $.circumscribe (togglee, toggler));
+
+  var area = toggler.data ('autoCloser:area');
+
+  $(document).bind ('mousemove', function (event) {
+    if ($.covers (event, area))
+      return;
+
+    $(document).unbind ('mousemove', arguments.callee);
+    toggler.click ();
+  });
+});
+
 // The asker
 $('.asker').live ('click', function () {
   var asker    = $(this);
