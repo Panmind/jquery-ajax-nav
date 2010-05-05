@@ -226,6 +226,12 @@ $(function () {
    * inside the .cycler container and add a click handler on each link to
    * show the corresponding .content element via a slide effect, taking
    * care of directions.
+   *
+   * You can add the "timer" class to the cycler to make it cycle its slides
+   * automagically each N ms, that you specify in the "rev" attribute. E.g.:
+   *
+   * <div class="cycler timer" rel="#antani" rev="5000"></div>
+   *
    */
   $('.cycler').each (function () {
     var controller = $(this);
@@ -249,7 +255,13 @@ $(function () {
 
       slide.data ('cycleidx', i);
 
-      link.click (function () {
+      link.click (function (event, timed) {
+        var timer = !timed && controller.data ('cycletimer');
+        if (timer) {
+          window.clearInterval (timer);
+          controller.data ('cycletimer', null);
+        }
+
         var hide = target.children (':not(:eq('+i+')):visible');
         if (hide.length == 0)
           return false;
@@ -272,6 +284,27 @@ $(function () {
     links.appendTo (controller);
     links = links.find ('a');
     links.first ().addClass ('selected');
+
+    // Automatic timer
+    //
+    if (controller.hasClass ('timer')) {
+      var timeout = parseInt (controller.attr ('rev')); // Dirty!
+
+      if (!timeout)
+        $.behaviourError (this, 'no "rev" attribute defined for the cycler timer!');
+
+      var current = 0, count = slides.length;
+
+      controller.data ('cycletimer', window.setInterval (function () {
+        if (current + 1 == count)
+          current = 0;
+        else
+          current++;
+
+        links.slice (current, current + 1).trigger ('click', [true]);
+
+      }, timeout));
+    }
   });
 })
 
