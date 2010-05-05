@@ -317,9 +317,8 @@ $.navLoadContent = function (loader, options) {
         }
 
         if (method == 'get' && !options.noHistory) {
-          var anchor = options.href.replace (options.base, '');
-          // $.log ("Updating anchor to " + anchor);
-          $.history.save (anchor);
+          var strip = new RegExp ('(http(s)?://[^/]+)?' + options.base);
+          $.history.save (options.href.replace (strip, ''));
         }
 
         __invoke ('success', options, loader)
