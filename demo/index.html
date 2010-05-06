@@ -4,6 +4,13 @@
   <title>jQuery Ajax Navigation Framework Demonstration</title>
   <meta name="generator" value="vim"></meta>
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+  <script type="text/javascript">
+    if (typeof jQuery == 'undefined') {
+      alert ("Sorry: you must be connected to the Internet for this demo to work")
+      throw ("No internet connection");
+    }
+  </script>
+
   <script type="text/javascript" src="../jquery.history.js"></script>
   <script type="text/javascript" src="../jquery.dim-opaque.js"></script>
   <script type="text/javascript" src="../jquery.utilities.js"></script>
