@@ -1,7 +1,7 @@
 jQuery AJAX Navigation framework
 ================================
 
- (C) 2009 Exelab s.n.c.
+ (C) 2009-2010 Exelab s.n.c.
 
 Tutorial documentation is a work in progress. In the
 meantime, have a look at the reference documentation
@@ -20,8 +20,9 @@ the full features (sinatra?).
 Core
 ----
 
-  * jquery.location.js - Document location handling
-  * jquery.ajax-nav.js - AJAX navigation framework
+  * jquery.location.js   - Document location handling
+  * jquery.ajax-nav.js   - AJAX navigation framework
+  * jquery.history.js    - AJAX history management
 
 Extras
 ------
@@ -36,8 +37,8 @@ Extras
 Support libraries
 -----------------
 
-  * vendor/jquery.history.js - jQuery history management
-  * vendor/jsdifflib.js      - Javascript Diff Library
+  * vendor/jsdifflib.js  - Javascript Diff Library
+
 
 Authors
 -------
