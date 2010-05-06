@@ -18,10 +18,11 @@
   <script type="text/javascript" src="../jquery.ajax-nav.js"></script>
 
   <script type="text/javascript">
-    var spinner;
+    var spinner, tabs;
 
     $(document).ready (function () {
       spinner = $('#spinner');
+      tabs    = $('#menu li');
 
       $.navInit ({
         container: '#container',
@@ -32,10 +33,19 @@
 
       $('a.nav').navLink ();
     });
+
+    $(document).ajaxReady (function (event, data) {
+      var page   = location.hash.slice (1, location.hash.length);
+      var active = tabs.find ('a[href='+page+']');
+
+      tabs.removeClass ('active');
+      active.parent ().addClass ('active');
+    });
   </script>
 
   <style type="text/css">
     .hidden { display: none; }
+    li.active { background-color: #ccc; }
     #spinner {
       height: 30px;
       left: 645px;
