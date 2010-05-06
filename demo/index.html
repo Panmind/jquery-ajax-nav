@@ -26,8 +26,8 @@
       $.navInit ({
         container: '#container',
         base     : /\/demo/,
-        loading  : function () { spinner.show (); },
-        success  : function () { spinner.hide (); }
+        loading  : function () { spinner.fadeIn ('fast'); },
+        success  : function () { spinner.fadeOut ('fast'); }
       });
 
       $('a.nav').navLink ();
@@ -36,6 +36,13 @@
 
   <style type="text/css">
     .hidden { display: none; }
+    #spinner {
+      height: 30px;
+      left: 645px;
+      position: absolute;
+      top: 30px;
+      width: 120px;
+    }
   </style>
 </head>
 <body>
