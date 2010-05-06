@@ -37,6 +37,14 @@
  *
  * navLink ()/navForm () are bound using .live () by default.
  *
+ * The custom event handlers receive a object with "loader" and
+ * "navOptions" as their second argument. The loader is the DOM
+ * element, wrapped into a jQuery, that triggered the AJAX load.
+ *
+ * If the load was triggered by other means (e.g. history, user
+ * manually changing the fragment in the address bar, automatic
+ * loading of the "root" page), the loader will be the "window"
+ * object.
  *
  * The big picture
  * ===============
@@ -258,7 +266,10 @@ $.navLoadContent = function (loader, options) {
   }
 
   if (!options.noHistory && $.history.current () && !options.noEvents)
-    $(document).trigger ('nav:unloading');
+    $(document).trigger ('nav:unloading', {
+      navOptions: options,
+      loader    : loader
+    });
 
   // Let's begin the party...
   //
@@ -342,7 +353,10 @@ $.navLoadContent = function (loader, options) {
         __invoke ('success', options, loader)
 
         if (!options.noEvents)
-          $(document).trigger ('nav:loaded');
+          $(document).trigger ('nav:loaded', {
+            navOptions: options,
+            loader    : loader
+          });
 
       } else if (error) {
         // Something went wrong, call user-defined callbacks
