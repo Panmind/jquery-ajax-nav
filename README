@@ -38,7 +38,7 @@ Support libraries
 -----------------
 
   * vendor/jsdifflib.js  - Javascript Diff Library
-
+  * jQuery 1.4.2         - Please see vendor/jquery-IE.patch
 
 Authors
 -------

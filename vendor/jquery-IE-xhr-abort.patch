@@ -1,0 +1,21 @@
+commit 8f9580ab9689d74581ec5e8fec07844b99fc722d
+Author: Marcello Barnaba <vjt@openssl.it>
+Date:   Wed Feb 24 22:49:50 2010 +0100
+
+    X-Browsing: fixed IE hangs because of wrong implementation of abort () in jQuery
+
+diff --git a/vendor/jquery-1.4.2.js b/vendor/jquery-1.4.2.js
+--- a/vendor/jquery-1.4.2.js
++++ b/vendor/jquery-1.4.2.js
+@@ -5230,7 +5230,10 @@ jQuery.extend({
+                        var oldAbort = xhr.abort;
+                        xhr.abort = function() {
+                                if ( xhr ) {
+-          oldAbort.call( xhr );
++                                       if ( oldAbort.call !== undefined )
++                                               oldAbort.call( xhr );
++                                       else
++                                               oldAbort ();
+                                }
+
+                                onreadystatechange( "abort" );
