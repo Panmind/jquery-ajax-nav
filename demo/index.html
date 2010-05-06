@@ -30,7 +30,7 @@
         success  : function () { spinner.hide (); }
       });
 
-      $('a').navLink ();
+      $('a.nav').navLink ();
     });
   </script>
 
@@ -43,8 +43,8 @@
   <h1>jQuery AJAX nav framework demo</h1>
 
   <ul id="menu">
-    <li><a href="about.html">About us</a></li>
-    <li><a href="contacts.html">Contacts</a></li>
+    <li><a href="about.html" class="nav">About us</a></li>
+    <li><a href="contacts.html" class="nav">Contacts</a></li>
   </ul>
 
   <div id="spinner" class="hidden">spinning...</div>
