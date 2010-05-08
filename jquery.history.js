@@ -1,14 +1,22 @@
 /*
- * jQuery history plugin
- *
- * sample page: http://www.mikage.to/jquery/jquery_history.html
+ * jQuery AJAX history plugin
  *
  * Copyright (c) 2006-2009 Taku Sano (Mikage Sawatari)
+ * Copyright (c) 2009-2010 Mind2Mind s.r.l.
+ *
  * Licensed under the MIT License:
  *   http://www.opensource.org/licenses/mit-license.php
  *
- * Modified by Lincoln Cooper to add Safari support and only call the callback once during initialization
- * for msie when no initial hash supplied.
+ * Modified by Lincoln Cooper to add Safari support and only call
+ * the callback once during initialization for msie when no initial
+ * hash supplied.
+ *
+ * Rewrote by Marcello Barnaba (Mind2Mind) to DRY it up,
+ * reduce the global JS namespace pollution and make the
+ * code more readable.
+ *
+ * Part of Panmind.org AJAX Navigation Framework,
+ * http://github.com/Panmind/jquery-ajax-nav.
  */
 
 (function ($) {
