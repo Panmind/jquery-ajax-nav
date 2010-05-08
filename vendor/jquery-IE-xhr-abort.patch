@@ -4,6 +4,8 @@ Date:   Wed Feb 24 22:49:50 2010 +0100
 
     X-Browsing: fixed IE hangs because of wrong implementation of abort () in jQuery
 
+    Reported to the jQuery trac at http://dev.jquery.com/ticket/6256#comment:1
+
 diff --git a/vendor/jquery-1.4.2.js b/vendor/jquery-1.4.2.js
 --- a/vendor/jquery-1.4.2.js
 +++ b/vendor/jquery-1.4.2.js
