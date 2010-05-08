@@ -2,49 +2,8 @@
 //
 
 /**
- * jQuery AJAX loading framework. History support is implemented via
- * the jquery.history.js plugin, located in public/javascripts/.
- *
- * The public API are the .navLink () and .navForm () methods, that
- * attach to the matched jQuery elements the AJAX loading behaviour.
- *
- * When the content starts loading, a custom "nav:unloading" event
- * is triggered on the document, unless this is the first page load
- * load (as determined by history).
- *
- * When the content is loaded, another custom "nav:loaded" event is
- * triggered on the whole document, again: conceptually equivalent to
- * jQuery's .ready () event.
- *
- * To listen on these events, the helpers `ajaxReady` and `ajaxUnload`
- * help bindign event handlers without specifying their names. Also,
- * the `ajaxInit` helper binds to the "nav:loaded" event using .one().
- *
- * To optimize loading, listeners that can be bound using .live ()
- * SHOULD be initialized into a
- *
- *   $(document).ajaxInit (function () { ... });
- *
- * listeners that instead must be bound without .live () (e.g. for
- * the mouseenter/mouseleave events) MUST be initialized into a
- *
- *   $(document).ajaxReady (function () { ... });
- *
- * listeners that do clean-ups of the page, stop timers, etc, MUST
- * be initialized into a
- *
- *   $(document).ajaxUnload (function () { ... });
- *
- * navLink ()/navForm () are bound using .live () by default.
- *
- * The custom event handlers receive a object with "loader" and
- * "navOptions" as their second argument. The loader is the DOM
- * element, wrapped into a jQuery, that triggered the AJAX load.
- *
- * If the load was triggered by other means (e.g. history, user
- * manually changing the fragment in the address bar, automatic
- * loading of the "root" page), the loader will be the "window"
- * object.
+ * jQuery AJAX navigation framework, with history, forms and UI
+ * disabling support.
  *
  * The big picture
  * ===============
@@ -58,23 +17,26 @@
  *     ...
  *   </form>
  *
- * Common code
- * -----------
+ *   <div id="container"></div>
  *
- *   $.navDefaultOptions = {
+ * Code
+ * ----
+ *
+ *   $.navInit ({
  *     container: '#container',
  *     base     : '/base'
- *   };
- *
- * Specialized code
- * ----------------
+ *   });
  *
  *   $(document).ajaxInit (function () {
  *     $('a.nav').navLink ();
  *     $('#foo').navForm ();
  *   });
  *
- * Different options can be passed to a navLink (), documented below.
+ * Different options can be passed to navInit, navLink and navForm.
+ * Options passed to navInit are defaults, that you can override on
+ * a specific link/form by passing them to navLink () and navForm().
+ *
+ * See below for a detailed explanation of each option.
  *
  * Code flow
  * =========
@@ -86,6 +48,43 @@
  * .navForm () behaves similarly, but adds a .submit () behaviour, and
  * behaves differently depending on the form method: see .navForm ()
  * documentation below.
+ *
+ * When the content starts loading, a custom "nav:unloading" event
+ * is triggered on the document, unless this is the first page load
+ * load (as determined by history).
+ *
+ * When the content is loaded, another custom "nav:loaded" event is
+ * triggered on the whole document, again: conceptually equivalent to
+ * jQuery's .ready () event.
+ *
+ * To listen on these events, use `ajaxReady` and `ajaxUnload`. Also,
+ * the `ajaxInit` helper binds to the "nav:loaded" event using .one().
+ *
+ * To optimize loading, your additional listeners bound via .live ()
+ * SHOULD be initialized into a
+ *
+ *   $(document).ajaxInit (function (event, nav) { ... });
+ *
+ * listeners that, instead must be bound without .live () MUST be
+ * initialized into a
+ *
+ *   $(document).ajaxReady (function (event, nav) { ... });
+ *
+ * listeners that do clean-ups of the page, stop timers, etc, MUST
+ * be initialized into a
+ *
+ *   $(document).ajaxUnload (function (event, nav) { ... });
+ *
+ * navLink ()/navForm () are bound using .live () by default.
+ *
+ * The custom event handlers receive a object with "loader" and
+ * "navOptions" as their second argument. The loader is the DOM
+ * element, wrapped into a jQuery, that triggered the AJAX load.
+ *
+ * If the load was triggered by other means (e.g. history, user
+ * manually changing the fragment in the address bar, automatic
+ * loading of the "root" page), the loader will be the "window"
+ * object.
  *
  * Available options
  * =================
@@ -110,7 +109,7 @@
  *  - prepend:   Boolean (optional, default: false)
  *               if true, the response is prepended to the container HTML
  *
- *  - root:      String (optional)
+ *  - root:      String (optional, default: none)
  *               the default URL path to load upon initialization,
  *               if no anchor is requested by the user.
  *               If it is undefined, no automatic loading occurs.
@@ -567,7 +566,7 @@ $.navHijack = function () {
 
 
 /**
- * Event registering syntactic sugar:
+ * Event registration syntactic sugar:
  *
  * Registers a callback to be run ONCE upon initialization
  */
@@ -576,14 +575,14 @@ $.fn.ajaxInit = function (fn) {
 };
 
 /**
- * Registers a callback to be run ALWAYS after content loaded
+ * Registers a callback to be run ALWAYS after content loads
  */
 $.fn.ajaxReady = function (fn) {
   return $(document).bind ('nav:loaded', fn);
 };
 
 /**
- * Registers a callback to be run ALWAYS after content unloaded
+ * Registers a callback to be run ALWAYS after content unloads
  */
 $.fn.ajaxUnload = function (fn) {
   return $(document).bind ('nav:unloading', fn);
