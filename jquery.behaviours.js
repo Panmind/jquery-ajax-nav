@@ -171,34 +171,54 @@ $('.loadedToggler').live ('click', function () {
 // both the toggler and the togglee is calculated. When the mouse leaves this area,
 // the toggler is automatically closed. Used primarirly in rich HTML selects.
 //
-$('.toggler.autoCloser').live ('afterToggle', function (event) {
-  var toggler = event.toggler, togglee = event.togglee, visible = event.visible;
+(function () {
 
-  if (!toggler.data ('autoCloser')) {
-    toggler.data ('autoCloser', {
-      area:    $.circumscribe (togglee, toggler, {pad: 5}),
-      handler: function (event) {
-        if ($.covers (event, event.data.area)) // Still in the area
-          return;
+  var autoclose_handler_for = function (toggler, togglee) {
+    // If this toggler is inside a position:fixed element, the calculations must
+    // take care of how much the user scrolled the page, and adjust the offset
+    // accordingly
+    //
+    var area  = $.circumscribe (togglee, toggler, {pad: 5});
+    var fixed = toggler.parents().filter (function () {
+      return $(this).css ('position') == 'fixed'
+    }).length > 0;
 
-        // No more in the area: unbind and click if it is not expanded
-        $(document).unbind ('mousemove', arguments.callee);
+    if (fixed)
+      area.top -= $(document).scrollTop ();
 
-        if (toggler.hasClass ('expanded'))
-          event.data.toggler.click ();
-      }
-    });
-  }
+    return function (event) {
+      var X, Y;
 
-  var data = toggler.data ('autoCloser');
+      if (fixed) { X = event.clientX; Y = event.clientY }
+      else       { X = event.pageX;   Y = event.pageY   }
 
-  if (visible) { // Already closed
-    $(document).unbind ('mousemove', data.handler);
-    return;
-  }
+      if ($.covers (X, Y, area)) // Still in the area
+        return;
 
-  $(document).bind ('mousemove', {area: data.area, toggler: toggler}, data.handler);
-});
+      // No more in the area: unbind and click if it is not expanded
+      $(document).unbind ('mousemove', arguments.callee);
+
+      if (toggler.hasClass ('expanded'))
+        toggler.click ();
+    };
+  };
+
+  $('.toggler.autoCloser').live ('afterToggle', function (event) {
+    var toggler = event.toggler, togglee = event.togglee, visible = event.visible;
+    var handler = toggler.data ('autoCloser');
+
+    if (!handler) {
+      handler = autoclose_handler_for (toggler, togglee);
+      toggler.data ('autoCloser', handler);
+    }
+
+    if (visible) // Already closed
+      $(document).unbind ('mousemove', handler);
+    else
+      $(document).bind ('mousemove', handler);
+  });
+
+}) ();
 
 $(function () {
   /**
