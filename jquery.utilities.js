@@ -48,9 +48,10 @@ $.covers = function (event, dimensions) {
 
 /**
  * Returns a dimensions object ({top, left, width, height}) of the rectangle
- * that circumscribes the two given elements.
+ * that circumscribes the two given elements. If options.pad is set to an
+ * integer value, the area is padded with the given pixels amount.
  */
-$.circumscribe = function (a, b) {
+$.circumscribe = function (a, b, options) {
   a = a.offsetAndDimensions ();
   b = b.offsetAndDimensions ();
 
@@ -61,6 +62,26 @@ $.circumscribe = function (a, b) {
 
   area.width  = Math.max (a.left + a.width, b.left + b.width) - area.left;
   area.height = Math.max (a.top + a.height, b.top + b.height) - area.top;
+
+  if (options.pad) {
+    var pad = parseInt (options.pad);
+    area.top    -= pad;
+    area.left   -= pad;
+    area.width  += pad * 2;
+    area.height += pad * 2;
+  }
+
+  // $.log ("Top: " + area.top + " Left: " + area.left +
+  //  " Width: " + area.width + " Height: " + area.height);
+
+  /* DEBUG
+  var debug = $('<div/>').css ({position: 'fixed', border: '1px solid red',
+    width: area.width + 'px', height: area.height + 'px',
+    left: area.left, top: area.top, zIndex: 0});
+  debug.attr ('id', 'circumscribeDebug');
+
+  $('body').append (debug);
+  */
 
   return area;
 };
