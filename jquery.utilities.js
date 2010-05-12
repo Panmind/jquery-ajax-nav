@@ -86,6 +86,21 @@ $.circumscribe = function (a, b, options) {
 };
 
 /**
+ * Sets the given attribute (attr) to the maximum value returned
+ * by the group of elements.
+ */
+$.fn.level = function (attr) {
+  var objects = $(this);
+  if (objects.length == 0)
+    return;
+
+  var values  = objects.map (function () { return $(this)[attr] () })
+  var maximum = Math.max.apply (null, $.makeArray (values));
+
+  objects[attr] (maximum);
+};
+
+/**
  * The K combinator :-)
  */
 function combine (ret, fn) {
