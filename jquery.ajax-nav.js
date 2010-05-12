@@ -661,29 +661,26 @@ var __validateOptions = function (options, element) {
  * *Private*: Invokes the given specialized callback name, stored
  * into the given options object, if it is defined. If a default
  * callback is defined as well, and it's not the same function as
- * the specialized one, it gets invoked, too.
+ * the specialized one, it gets invoked, too, UNLESS the specialized
+ * one returns *false*.
  *
- * Returns a boolean that indicates wheter a specialized
- * callback was defined or not.
+ * Returns undefined.
  */
 var __invoke = function (name, options, loader) {
   var defaultFn     = $.navDefaultOptions[name];
   var specializedFn = options[name];
-  var ret           = false;
+  var bubble        = true;
 
   if ( (typeof (specializedFn) == 'function') &&
         specializedFn != defaultFn) {
     // $.log ("invoking specialized " + name + " callback");
-    specializedFn.apply (loader, [options]);
-    ret = true;
+    bubble = specializedFn.apply (loader, [options]);
   }
 
-  if ( (typeof (defaultFn) == 'function')) {
+  if ( (typeof (defaultFn) == 'function') && bubble !== false) {
     // $.log ("invoking default " + name + " callback");
     defaultFn.apply (loader, [options]);
   }
-
-  return ret;
 }
 
 })(jQuery);
