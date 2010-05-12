@@ -23,26 +23,25 @@ $.clone = function (obj) {
 };
 
 /**
- * Returns true or false whether the given event.client{X,Y} coordinates
+ * Returns true or false whether the given X, Y coords
  * are covered by this element area on the page or not.
  */
-$.fn.covers = function (event) {
-  return $.covers (event, $(this).offsetAndDimensions ());
+$.fn.covers = function (X, Y) {
+  return $.covers (X, Y, $(this).offsetAndDimensions ());
 };
 
 /*
  * Returns true or false whether the given event.client{X,Y} coordinates
  * are covered by the given dimensions.
  */
-$.covers = function (event, dimensions) {
-  if (!(event.clientX && event.clientY))
-    throw ("BUG: event given to $.covers () doesn't have client{X,Y} properties");
+$.covers = function (X, Y, dimensions) {
+  // $.log ('X: ' + X + ' Y: ' + Y);
 
   return (
-    event.clientX > dimensions.left &&
-    event.clientX < (dimensions.left + dimensions.width) &&
-    event.clientY > dimensions.top &&
-    event.clientY < (dimensions.top + dimensions.height)
+    X >  constraint.left &&
+    X < (constraint.left + constraint.width) &&
+    Y >  constraint.top &&
+    Y < (constraint.top + constraint.height)
   );
 };
 
