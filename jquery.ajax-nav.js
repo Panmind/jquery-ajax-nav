@@ -166,15 +166,64 @@
  *               set, it'll be extracted from the link href attribute or
  *               the form action attribute.
  *
+ * Hijacking
+ * =========
+ *
+ * In order to handle redirection from deep resource URIs to
+ * anchor-base ones (e.g. from
+ *
+ *   http://example.com/projects/1/writeboards/42
+ *
+ * to
+ *
+ *   http://example.com/projects/1#writeboards/42
+ *
+ * ) you should execute a snippet of code immediately after the
+ * <head> element: this way the browser will stop execution and
+ * let that code control to change the location.href property.
+ *
+ * Example implementation follows:
+ *
+    (function (P, C) {
+      var M = location.href.match (new RegExp ('(.+'+ P+C +')/+(.+)'));
+      if (!M) {
+        document.cookie = 'xhr=0; path="'+P+'"';
+      } else {
+        document.cookie = 'xhr=1; path="'+P+'"';
+        location.href   = M[1] + '#' + M[2]
+      }
+    }) ('/projects', '/[0-9]+');
+
+ *
+ * You can wrap this into an helper such as "ajax_hijacking_script"
+ * and then call it in your views like
+ *
+
+    <%= ajax_hijacking_script('/projects', '/[0-9]+') %>
+
+ *
+ * This code also sets an "xhr" cookie to 1 if hijacking was
+ * applied, or 0 if it was not. The backend can, thus, decide
+ * what to render after inspecting the value of this cookie.
+ * E.g.:
+ *
+    def render_spinner_if_hijacked
+      render :template => '/loading' if cookies[:xhr] == '1'
+    end
+
+ *
+ *
  * Known issues
  * ============
  *
- * TODO: proper error handling, the foundation is implemented but still lacks.
- * FIXME: currently AJAX uploads aren't supported
+ * TODO: proper error handling, the foundation is implemented but still
+ * lacks.
+ * FIXME: currently AJAX file uploads aren't supported
  * IDEA: how about making the "/base" optional?
  *
- *   - vjt  Wed Nov 11 14:33:49 CET 2009
+ *   - vjt  Sun May 16 18:03:05 CEST 2010
  */
+
 (function ($) {
 
 /**
@@ -511,59 +560,6 @@ $.navInit = function () {
 
   // $.log ('AJAX navigation initialized and ready to roll');
 };
-
-/**
- * This function checks whether the current URL path should
- * be handled via AJAX, and does a page load by replacing the
- * path with an AJAX anchor. e.g., the user navigates to
- *
- *   http://example.com/projects/1/writeboards/42
- *
- * This function redirects to
- *
- *   http://example.com/projects/1#writeboards/42
- *
- * It MUST be called before the `ready` event is fired.
- *
- * Returns boolean, indicating wheter hijack happened or not, that
- * is useful to skip the $.navInit () in your .ready () event. I
- * tried to implement it using .unbind () but I hadn't success:
- * better safe than sorry.
- *
- */
-$.navHijack = function () {
-  if ($.location.get ())
-    throw ('BUG: $.navHijack () MUST be called before the `ready` event occurs');
-
-  $.location.__save ();
-
-  var request = $.location.getPath ();    // /projects/1/writeboards/42
-  var base    = $.navDefaultOptions.base; // /\/projects\/\d+/
-
-  // Are we interested to this request?
-  //
-  if (!base.test (request))
-    return false;
-
-  var root  = request.match (base)[0];                         // /projects/1
-  var route = request.replace (base, '').replace (/^\//, '#'); // #writeboards/42
-
-  // Is this a request for the base path?
-  //
-  if (request == root)
-    return false;
-
-  // Concurrently, jQuery could be evaluating its .support object,
-  // that requires document.body. If it isn't defined, an unhandled
-  // exception would be thrown, so this corner case is handled here.
-  if (!document.body)
-    document.write ('<body/>');
-
-  $.location.set (root + route);
-
-  return true;
-};
-
 
 /**
  * Event registration syntactic sugar:
