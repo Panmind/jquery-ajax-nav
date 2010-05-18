@@ -434,7 +434,10 @@ $.navLoadContent = function (loader, options) {
 $.fn.navLink = function (options) {
   options = __validateOptions (options, this);
 
-  var listener = function () {
+  var listener = function (event) {
+    if (event.isPropagationStopped ())
+      return false;
+
     var link = $(this);
     var args = $.clone (options);
 
@@ -473,7 +476,10 @@ $.fn.navLink = function (options) {
 $.fn.navForm = function (options) {
   options = __validateOptions (options, this);
 
-  var listener = function () {
+  var listener = function (event) {
+    if (event.isPropagationStopped ())
+      return false;
+
     var form = $(this);
     var args = $.clone (options);
     var data = form.serialize ();
