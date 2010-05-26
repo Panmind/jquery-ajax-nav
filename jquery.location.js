@@ -83,7 +83,11 @@ $.location = new (function () { // Inline object creation and initialization
   };
 
   this.getForTracking = function () {
-    return URI + '/' + this.decodeAnchor (Anchors);
+    var slug = this.decodeAnchor (Anchors);
+    if (URI.slice (-1) != '/' && slug[0] != '/')
+      slug = '/' + slug;
+
+    return URI + slug;
   };
 
   /**
