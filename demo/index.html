@@ -37,6 +37,7 @@
       });
 
       $('a.nav').navLink ();
+      $('#resource_update').navForm ();
       $('#form').navForm ();
     });
 
@@ -58,10 +59,12 @@
       active.parent ().addClass ('active');
     });
   </script>
-
+  <link href='http://fonts.googleapis.com/css?family=Droid+Serif' rel='stylesheet' type='text/css'>
   <style type="text/css">
     .hidden { display: none; }
-    li.active { background-color: #ccc; }
+    li {padding:5px;}
+    li.active { background-color: #eee; }
+    
     #spinner {
       height: 30px;
       left: 645px;
@@ -70,26 +73,50 @@
       width: 120px;
     }
     #disabler { background-color: #fff; opacity: 0.5; }
+    #container { margin: 20px; border: 1px solid #c0c0c0; padding: 10px; float:right; width:400px;;}
+    body { padding: 10px; font-family: 'Droid Serif', arial, serif; }
+    #examples { float: left; width: 340px;}
+    #main {width:900px; min-width:900px; }
+    
   </style>
 </head>
 <body>
-
-  <h1>jQuery AJAX nav framework demo</h1>
-
-  <ul id="menu">
-    <li><a href="about.html" class="nav">About us</a></li>
-    <li><a href="contacts.html" class="nav">Contacts</a></li>
-  </ul>
   
-  <form id="form" action="form.html" class="nav" method="post" accept-charset="utf-8">
-    <p><input type="submit" value="It also works with forms! click here."></p>
-  </form>
-  
-  <div id="spinner" class="hidden">spinning...</div>
+  <div id="main">
+    <div id="header">
+      <h1>jQuery AJAX nav framework demo</h1>    
+    </div>
 
-  <div id="container">
-    <p>Click on one of the above links, then try the history and try to refresh the page :-).</p>
+    <div id="examples">
+      <h2>Example 1</h2>
+      <p><em>A classic navigation.</em></p>
+      <ul id="menu">
+        <li><a href="about.html" class="nav">About us</a></li>
+        <li><a href="contacts.html" class="nav">Contacts</a></li>
+      </ul>
+
+      <h2>Example 2</h2>
+      <form id="resource_update" action="form" class="nav" method="post" accept-charset="utf-8">
+        <p>This is an example of a form which updates a resource. No redirect, and no history. The server response simply updates the container.</p>    
+          <input type="submit" value="click here">
+        </p>
+      </form>
+
+      <h2>Example 3</h2>
+      <form id="form" action="resource_update.html" class="nav" method="post" accept-charset="utf-8">
+        <p>This is an example of a form submit that redirects the user's browser, setting the history and 
+          allowing the user to back.
+        </p>
+        <input type="submit" value="click here">
+      </form>
+    </div>
+  
+    <div id="spinner" class="hidden">spinning...</div>
+
+    <div id="container">
+      <p>This is the container. Use the examples to make it change :-).</p>
+    </div>
+  
   </div>
-
 </body>
 </html>
