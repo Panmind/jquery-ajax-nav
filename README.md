@@ -12,14 +12,12 @@ in the source files.
 Demo
 ----
 
-Fire up your browser to the demo/index.html file, click
-on the links, use history, bookmark a link and then re-
-navigate it, refresh, etc. You must be connected to the
-internet for it to work, because it includes the jQuery
-library via the Google AJAX APIs.
+To launch the demo app: 
 
-TODO: styling, forms, micro-appserver to demonstrate
-the full features (sinatra?).
+> rackup -p 8080 
+
+Poin your browser to localhost:8080 and click around: 
+
 
 Core
 ----

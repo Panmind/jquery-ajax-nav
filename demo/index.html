@@ -30,13 +30,14 @@
 
       $.navInit ({
         container: '#container', // Load target
-        base     : /\/demo/,     // Load base
+        base     : /\//,     // Load base
         loading  : function () { spinner.fadeIn ('fast'); }, // Callbacks
         success  : function () { spinner.fadeOut ('fast'); } // "this" is
         // set to the load trigger, with the same semantics explained below.
       });
 
       $('a.nav').navLink ();
+      $('#form').navForm ();
     });
 
     // This function is called after the loading has been successful.
@@ -79,7 +80,11 @@
     <li><a href="about.html" class="nav">About us</a></li>
     <li><a href="contacts.html" class="nav">Contacts</a></li>
   </ul>
-
+  
+  <form id="form" action="form.html" class="nav" method="post" accept-charset="utf-8">
+    <p><input type="submit" value="It also works with forms! click here."></p>
+  </form>
+  
   <div id="spinner" class="hidden">spinning...</div>
 
   <div id="container">
