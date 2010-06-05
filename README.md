@@ -16,8 +16,8 @@ To launch the demo app:
 
 > rackup -p 8080 
 
-Poin your browser to localhost:8080 and click around: 
-
+Point your browser to localhost:8080 and click around. Source files
+are in the demo/ directory.
 
 Core
 ----
