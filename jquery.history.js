@@ -1,28 +1,42 @@
-/*
- * jQuery AJAX history plugin
+/**
+ * jQuery Awesome History Plugin
+ * -----------------------------
  *
- * Copyright (c) 2006-2009 Taku Sano (Mikage Sawatari)
- * Copyright (c) 2009-2010 Mind2Mind s.r.l.
+ * Copyright (C) 2006-2009 Taku Sano (Mikage Sawatari)
+ * Copyright (C) 2009      Lincoln Cooper
+ * Copyright (C) 2010      Marcello Barnaba
  *
  * Licensed under the MIT License:
  *   http://www.opensource.org/licenses/mit-license.php
  *
- * Modified by Lincoln Cooper to add Safari support and only call
- * the callback once during initialization for msie when no initial
- * hash supplied.
  *
- * Rewrote by Marcello Barnaba (Mind2Mind) to DRY it up,
- * reduce the global JS namespace pollution and make the
- * code more readable.
+ * Based on Taku Sano's jQuery History plugin, web page:
+ *   http://www.mikage.to/jquery/jquery_history.html
  *
- * Part of Panmind.org AJAX Navigation Framework,
- * http://github.com/Panmind/jquery-ajax-nav.
+ * Modified by Lincoln Cooper to add Safari support and
+ * only call the callback once during initialization for
+ * MSIE when no initial hash supplied.
+ *
+ * Rewritten by Marcello Barnaba to make it more compatible
+ * with IE quirks, more performant and more easy on the eyes.
+ *
  */
 
 (function ($) {
   var _current, _callback;
 
   $.history = {
+    /**
+     * Initializes AJAX history, the given callback will be called
+     * when history changes.
+     *
+     * The core of the implementation is the setInterval argument,
+     * that checks whether the current document hash has changed.
+     * It gets called every 100ms.
+     *
+     * If we're running on MSIE, we need an iFrame to manipulate
+     * history entries, more on this topic below.
+     */
     init: function (callback) {
       _callback = callback;
       _current  = location.hash || '#';
@@ -50,6 +64,11 @@
       }, 100);
     },
 
+    /**
+     * Saves the given hash into history if it is different than
+     * the one currently loaded and invokes the user provided
+     * callback.
+     */
     load: function (hash) {
       if (!changed (hash))
         return;
@@ -58,6 +77,14 @@
       invoke ();
     },
 
+    /**
+     * Saves the given hash into history. Iff the second optional
+     * argument is true, the current location hash (either in the
+     * MSIE iFrame or in the addressbar) is not updated: it's set
+     * true by the monitor function (called every 100ms) in order
+     * to not alter the browser history stack when an user clicks
+     * on the back or forward button.
+     */
     save: function (hash) {
       hash = $.location.encodeAnchor (hash)
 
@@ -77,6 +104,9 @@
       _current = hash;
     },
 
+    /**
+     * Returns the currently loaded hash.
+     */
     current: function () {
       return _current;
     }
@@ -84,6 +114,19 @@
 
   //////////// Private ///////////////
 
+  /**
+   * Handle an iFrame object for IE. The theory behind using iFrames
+   * is that, unlike other engines (Webkit, Gecko and Opera), IE doesn't
+   * add new history entries when the location.hash is changed via JS:
+   *
+   * the only way to add history entries is to rewrite the contents of
+   * an hidden iFrame, and that's what the following code does.
+   *
+   * You MUST have the following markup in your DOM:
+   *   <iframe src="javascript:false" style="display:none" id="ie_history"></iframe>
+   *
+   * or an exception will be thrown.
+   */
   var _iframe = {
     init: function () {
       this.element = $('#ie_history')[0];
