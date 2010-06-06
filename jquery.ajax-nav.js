@@ -391,7 +391,8 @@ $.navLoadContent = function (loader, options) {
         }
 
         if (method == 'get' && !options.noHistory) {
-          var save = options.href.replace ($.navDefaultOptions.urlRE, '');
+          var save = decodeURIComponent (options.href)
+                      .replace ($.navDefaultOptions.urlRE, '');
           // Don't save into the history the parameter that informs the
           // backend that this request comes from history.
           //
@@ -525,7 +526,7 @@ $.navInit = function () {
 
   // Initialize the base path
   //
-  var base = $.location.getPath ();
+  var base = decodeURIComponent ($.location.getPath ());
 
   if (!/\/$/.test (base))
     base = base.replace (/\/[^\/]+$/, '/');

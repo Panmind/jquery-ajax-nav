@@ -181,7 +181,8 @@
   };
 
   var changed = function (hash) {
-    if (hash && hash != 'false' && hash != _current)
+    hash = hash && decodeURIComponent (hash);
+    if (hash && hash != 'false' && hash != decodeURIComponent (_current))
       return true;
   }
 
