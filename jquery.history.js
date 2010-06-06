@@ -25,10 +25,10 @@
   $.history = {
     init: function (callback) {
       _callback = callback;
-      _current  = '#' + location.hash.replace (/^#/, '');
+      _current  = location.hash || '#';
 
       if ($.browser.msie && ($.browser.version < 8 || document.documentMode < 8))
-        _iframe.init (_current);
+        _iframe.init ();
 
       else if ($.browser.opera)
         history.navigationMode = 'compatible';
@@ -37,11 +37,11 @@
         var hash;
 
         if (_iframe.inited)
-          hash = stripQuery (_iframe.get ());
+          hash = _iframe.get ();
         else
-          hash = stripQuery (location.hash);
+          hash = location.hash;
 
-        if (!changed (hash))
+        if (!changed (hash || '#'))
           return;
 
         $.history.save (hash, true);
@@ -58,20 +58,22 @@
       invoke ();
     },
 
-    save: function (hash, skipIframe) {
-      hash = decodeURIComponent (stripQuery (hash))
+    save: function (hash) {
+      hash = $.location.encodeAnchor (hash)
 
-      if (!hash.match (/^#/))
-        hash = '#' + hash;
-
-      if (!changed (hash))
+      if (!changed (hash)) {
+        $.location.__save (); // Better safe than sorry
         return;
+      }
 
-      location.hash = hash;
+      var update = !arguments[1];
+      if (update || _iframe.inited)  // On IE the hash must be always
+        $.location.setAnchor (hash); // updated, as it doesn't create
+                                     // new history entries
 
-      if (_iframe.inited && !skipIframe)
-        _iframe.set (hash);
-
+      if (update && _iframe.inited) // But the iFrame must be updated
+        _iframe.set (hash);         // only when it is needed because
+                                    // it creates new history entries
       _current = hash;
     },
 
@@ -83,7 +85,7 @@
   //////////// Private ///////////////
 
   var _iframe = {
-    init: function (hash) {
+    init: function () {
       this.element = $('#ie_history')[0];
 
       if (this.element.length == 0)
@@ -132,12 +134,8 @@
 
   var invoke = function () {
     if (_current)
-      _callback (_current.replace(/^#/, ''));
+      _callback ($.location.decodeAnchor (_current));
   };
-
-  var stripQuery = function (s) {
-    return s.replace(/\?.*$/, '');
-  }
 
   var changed = function (hash) {
     if (hash && hash != 'false' && hash != _current)
