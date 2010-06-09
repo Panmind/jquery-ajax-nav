@@ -411,6 +411,7 @@ $.navLoadContent = function (loader, options) {
         // Something went wrong, call user-defined callbacks
         // and opaque () the container back.
         //
+        options.response  = xhr.responseText;
         options.lastError = { xhr: xhr, message: error }; // XXX
         __invoke ('error', options, loader);
       }
