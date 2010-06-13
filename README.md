@@ -47,6 +47,7 @@ Authors
 
   * Marcello Barnaba  <marcello.barnaba@exelab.eu>
   * Ferdinando de Meo <ferdinando.demeo@exelab.eu>
+  * Paolo Zaccagnini  <paolo.zaccagnini@exelab.eu>
   * Exelab Karma      <exelab@exelab.eu>
 
   - vjt  Thu Nov 19 00:03:37 CET 2009
