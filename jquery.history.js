@@ -39,7 +39,7 @@
      */
     init: function (callback) {
       _callback = callback;
-      _current  = location.hash || '#';
+      _current  = '#';
 
       if ($.browser.msie && ($.browser.version < 8 || document.documentMode < 8))
         _iframe.init ();
@@ -53,12 +53,14 @@
         if (_iframe.inited)
           hash = _iframe.get ();
         else
-          hash = location.hash;
+          hash = location.hash || '#';
 
-        if (!changed (hash || '#'))
+        hash = normalize (hash);
+
+        if (!changed (hash))
           return;
 
-        $.history.save (hash, true);
+        $.history.save (hash, false);
         invoke ();
 
       }, 100);
@@ -70,6 +72,11 @@
      * callback.
      */
     load: function (hash) {
+      if (!hash)
+        return;
+
+      hash = normalize (hash)
+
       if (!changed (hash))
         return;
 
@@ -85,22 +92,23 @@
      * to not alter the browser history stack when an user clicks
      * on the back or forward button.
      */
-    save: function (hash) {
-      hash = $.location.encodeAnchor (hash)
+    save: function (hash, update) {
+      hash = normalize (hash);
 
-      if (!changed (hash)) {
-        $.location.__save (); // Better safe than sorry
+      if (!hash)
         return;
-      }
 
-      var update = !arguments[1];
+      if (update === undefined)
+        update = true;
+
       if (update || _iframe.inited)  // On IE the hash must be always
         $.location.setAnchor (hash); // updated, as it doesn't create
                                      // new history entries
 
-      if (update && _iframe.inited) // But the iFrame must be updated
-        _iframe.set (hash);         // only when it is needed because
-                                    // it creates new history entries
+      if (update && _iframe.inited)  // But the iFrame must be updated
+        _iframe.set (hash);          // only when it is needed because
+                                     // it creates new history entries
+      $.log ("saving " + hash);
       _current = hash;
     },
 
@@ -180,10 +188,19 @@
       _callback ($.location.decodeAnchor (_current));
   };
 
+  var normalize = function (hash) {
+    try {
+      hash = decodeURIComponent (hash).replace (/[?&\/]+$/, '');
+      return $.location.encodeAnchor (hash)
+    } catch (e) {
+      return undefined;
+    }
+  };
+
   var changed = function (hash) {
-    hash = hash && decodeURIComponent (hash);
-    if (hash && hash != 'false' && hash != decodeURIComponent (_current))
+    if (hash && hash != 'false' && hash != _current) {
       return true;
-  }
+    }
+  };
 
 })(jQuery);
