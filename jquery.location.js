@@ -46,7 +46,7 @@ $.location = new (function () { // Inline object creation and initialization
    */
   this.set = function (href) {
     document.location.href = href;
-    this.__save ();
+    this.sync ();
   };
 
   /**
@@ -150,11 +150,11 @@ $.location = new (function () { // Inline object creation and initialization
   };
 
   /**
-   * Private: saves the current document location
+   * Syncs the current document location into our variables
    *
    * @return undefined
    */
-  this.__save = function () { // Private
+  this.sync = function () {
     var loc = document.location;
     Host    = loc.protocol + '//' + loc.host;
     Path    = loc.pathname;
@@ -167,5 +167,5 @@ $.location = new (function () { // Inline object creation and initialization
  * When the ready event fires, saves the current location
  */
 $(document).ready (function () {
-  $.location.__save ();
+  $.location.sync ();
 });
