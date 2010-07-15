@@ -108,7 +108,7 @@
       if (update && _iframe.inited)  // But the iFrame must be updated
         _iframe.set (hash);          // only when it is needed because
                                      // it creates new history entries
-      $.log ("saving " + hash);
+      // $.log ("saving " + hash);
       _current = hash;
     },
 
