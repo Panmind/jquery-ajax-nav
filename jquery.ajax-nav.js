@@ -178,46 +178,42 @@
  *
  *   http://example.com/projects/1#writeboards/42
  *
- * ) you should execute a snippet of code immediately after the
- * <head> element: this way the browser will stop execution and
- * let that code control to change the location.href property.
+ * ) you should pass the links you want to be hijacked via the
+ * $.navHijack () method: any link matching the base paths you
+ * pass to it will be split into two parts and the slash that
+ * separates 'em will be replaced by a '#'.
  *
- * Example implementation follows:
+ * E.g.:
  *
-    (function (P, C) {
-      var M = location.href.match (new RegExp ('(.+'+ P+C +')/+(.+)'));
-      if (!M) {
-        document.cookie = 'xhr=0; path="'+P+'"';
-      } else {
-        document.cookie = 'xhr=1; path="'+P+'"';
-        location.href   = M[1] + '#' + M[2]
-      }
-    }) ('/projects', '/[0-9]+');
-
+     $.navHijack ([ '/projects/\\d+', '/search' ]);
  *
- * You can wrap this into an helper such as "ajax_hijacking_script"
- * and then call it in your views like
+ * Moreover, to optimize loading time, a cookie named "nha"
+ * (that stands for NavHijAck.. but is also the nick of the
+ * beloved one ;-) will be set on the hijacked path, with a
+ * 1000ms expiration time.
  *
-
-    <%= ajax_hijacking_script('/projects', '/[0-9]+') %>
-
+ * The backend can, thus, render only a spinner to display
+ * to the user while this code loads the page contents via
+ * a subsequent AJAX request.
  *
- * This code also sets an "xhr" cookie to 1 if hijacking was
- * applied, or 0 if it was not. The backend can, thus, decide
- * what to render after inspecting the value of this cookie.
  * E.g.:
  *
     def render_spinner_if_hijacked
-      render :template => '/loading' if cookies[:xhr] == '1'
+      render :template => '/loading' if cookies['nha'] == '1'
     end
-
  *
+ * And in your controller:
+ *
+    class FooController < ApplicationController
+      before_filter :render_spinner_if_hijacked
+
+      # ... your code
+    end
  *
  * Known issues
  * ============
  *
- * TODO: proper error handling, the foundation is implemented but still
- * lacks.
+ * TODO: proper error handling, the foundation is implemented but still lacks.
  * FIXME: currently AJAX file uploads aren't supported
  * IDEA: how about making the "/base" optional?
  *
@@ -685,6 +681,56 @@ var __invoke = function (name, options, loader) {
     // $.log ("invoking default " + name + " callback");
     defaultFn.apply (loader, [options]);
   }
-}
+};
+
+
+$.navHijackRedirect = function (base, anchor) {
+  // Inform the backend to render only a spinner to optimize loading time,
+  // via a cookie that expires 1 sec later the user clicked this link.
+  //
+  var expire = new Date((+new Date) + 1000).toGMTString ();
+  document.cookie = 'nha=1; path="' + base + '"; expires=' + expire;
+  $.location.set (base + $.location.encodeAnchor (anchor));
+};
+
+$.navHijackReset = function (href) {
+  if (href.match (/^\//))
+    href = href.slice (1);
+
+  // Reset a possibly older cookie
+  //
+  document.cookie = 'nha=; path="' + href.split ('/')[0] + '"; expires=Thu, 01 Jan 1970 00:00:01 GMT';
+};
+
+$.navHijack = function (paths) {
+  var hijack = $.map (paths, function (path) {
+    return new RegExp ('('+ path +')/+(.+)');
+  });
+
+  $('a').click (function () {
+    var href = $(this).attr ('href'), matched = false;
+
+    if (href.match (/^#/))
+      return;
+
+    $.each (hijack, function (i, re) {
+      var m = href.match (re);
+      if (m) {
+        $.navHijackRedirect (m[1], m[2]);
+        matched = true;
+        return false;
+      } else {
+        $.navHijackReset (href);
+      }
+    });
+
+    if (matched)
+      return false;
+  });
+
+  // Poor man's singleton method! :-)
+  //
+  $.navHijack = function () { throw ("This function can be invoked only once.") };
+};
 
 })(jQuery);
