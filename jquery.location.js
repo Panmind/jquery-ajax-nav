@@ -134,11 +134,11 @@ $.location = new (function () { // Inline object creation and initialization
     if (!/^[\/#]/.test (href))
       href = '/' + (href || '');
 
-    return decodeURIComponent (href
-      .replace (/^\//, '#')
-      .replace (/\?/,  ':')
-      .replace (/\&/g, ';')
-    );
+    return decodeURIComponent (href)
+             .replace (/[?&\/]+$/, '') // Trim the tail
+             .replace (/^\//, '#')     // Replace the leading / with '#'
+             .replace (/\?/,  ':')     // Replace '?' with ':'
+             .replace (/\&/g, ';')     // Replace '&' with ';'
   };
 
   // TODO: Documentation

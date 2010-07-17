@@ -190,8 +190,7 @@
 
   var normalize = function (hash) {
     try {
-      hash = decodeURIComponent (hash).replace (/[?&\/]+$/, '');
-      return $.location.encodeAnchor (hash)
+      return $.location.encodeAnchor (hash) || '#';
     } catch (e) {
       return undefined;
     }
