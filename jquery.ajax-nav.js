@@ -708,9 +708,10 @@ $.navHijack = function (paths) {
   });
 
   $('a').click (function () {
-    var href = $(this).attr ('href'), matched = false;
+    var link = $(this);
+    var href = link.attr ('href'), matched = false;
 
-    if (href.match (/^#/))
+    if (href.match (/^#/) || link.attr ('rel').match (/nofollow/))
       return;
 
     $.each (hijack, function (i, re) {
