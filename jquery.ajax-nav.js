@@ -711,7 +711,9 @@ $.navHijack = function (paths) {
     var link = $(this);
     var href = link.attr ('href'), matched = false;
 
-    if (href.match (/^#/) || link.attr ('rel').match (/nofollow/))
+    if (href.match (/^#/) ||
+        link.attr ('rel').match (/nofollow/) ||
+        link.attr ('class').match (/nohijack/))
       return;
 
     $.each (hijack, function (i, re) {
