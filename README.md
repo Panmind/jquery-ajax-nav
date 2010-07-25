@@ -28,7 +28,7 @@ you can obtain from using these frameworks; have a look as well to
 [application.js](http://panmind.org/javascripts/application.js),
 [network/globals.js](http://panmind.org/javascripts/network/globals.js),
 [network/res-nav.js](http://panmind.org/javascripts/network/res-nav.js) and
-[project/globals.js](http://panmind.org/javascripts/project/globals.js) to
+[projects/globals.js](http://panmind.org/javascripts/projects/globals.js) to
 see how we implemented them in a quite large Rails application.
 
 Core
