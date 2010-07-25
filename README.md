@@ -18,7 +18,11 @@ enter the "demo" directory and issue:
     rackup -p 8080
 
 Then point your browser to http://localhost:8080/ and click around.
-Source files are in the `demo/` directory.
+Source files are in the `demo/` directory. Please note that the Rack
+backend is necessary to navigate the demo without errors: the forms
+work only when there's a backend answering to POST requests and the
+demo home page must be handled differently whether the client request
+comes from XHR or not.
 
 Full-fledged demo
 -----------------
