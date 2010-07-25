@@ -12,9 +12,10 @@ in the source files.
 Demo
 ----
 
-To launch the demo app: 
+To launch the demo app, from your favorite terminal application,
+enter the "demo" directory and issue:
 
-> rackup -p 8080 
+    rackup -p 8080
 
 Point your browser to localhost:8080 and click around. Source files
 are in the demo/ directory.

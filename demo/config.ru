@@ -1,7 +1,7 @@
 require 'logger' 
 require 'rubygems'
 require 'rack'
-require 'demo/demo' 
+require 'demo' 
 
 use Rack::Reloader
 
