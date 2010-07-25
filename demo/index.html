@@ -136,15 +136,18 @@
 
       <h2>Example 2</h2>
       <form id="resource_update" action="form" class="nav" method="post" accept-charset="utf-8">
-        <p>This is an example of a form which updates a resource. No redirect, and no history. The server response simply updates the container.</p>    
-          <input type="submit" value="click here">
-        </p>
+        <p>This is an example of a form submission that mimicks the classic POST/redirect cycle
+          on regular HTML forms, thus not allowing the user to re-issue the POST by navigating
+          via the back button. You can navigate back and forward between the previously displayed
+          page and the one after the redirect.</p>
+        <input type="submit" value="click here">
       </form>
 
       <h2>Example 3</h2>
       <form id="form" action="resource_update.html" class="nav" method="post" accept-charset="utf-8">
-        <p>This is an example of a form submit that redirects the user's browser, setting the history and 
-          allowing the user to back.
+        <p>This is an example of a form which updates a resource, without redirecting the user after
+          completion: it mimicks the classic POST/print response cycle. The server response simply
+          updates the container.</p>
         </p>
         <input type="submit" value="click here">
       </form>
