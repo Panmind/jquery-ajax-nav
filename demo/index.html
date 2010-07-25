@@ -29,11 +29,50 @@
       tabs    = $('#menu li');
 
       $.navInit ({
-        container: '#container', // Load target
-        base     : /\//,         // Load base
-        loading  : function () { spinner.fadeIn ('fast'); }, // Callbacks
-        success  : function () { spinner.fadeOut ('fast'); } // "this" is
-        // set to the load trigger, with the same semantics explained below.
+        // Load target -- specifiy any jQuery valid selector
+        //
+        container: '#container',
+
+        // Load base -- should be removed and inferred automagically
+        // from the current location.href -- in a future version of
+        // the framework.
+        //
+        base     : /\//,
+
+        // Callback executed while the AJAX request is loading
+        // 'this' is set to the load trigger, while the first
+        // argument contains the very same options hash passed
+        // to the $.navInit () method.
+        //
+        loading  : function (nav) {
+          spinner.fadeIn ('fast');
+        },
+
+        // Callback executed when something goes wrong, that is:
+        // the HTTP status returned by the backend is not in the
+        // 200 - 299 range - as determined by jQuery.ajax.
+        //
+        // The first argument contains the navInit options hash
+        // plus a .response property containing the server response
+        // text and a .lastError property containing the XHR object
+        // and the jQuery translated error message -- usually a
+        // plain "error" string.
+        //
+        error    : function (nav) {
+          alert ('Loading ' + nav.base + nav.href +
+                 ' returned HTTP error ' + nav.lastError.xhr.status);
+        },
+
+        // Callback executed when the request is complete, either
+        // successfully or with errors.
+        //
+        complete : function (nav) {
+          spinner.fadeOut ('fast');
+        }
+
+        // Callback executed when the request is completed successfully
+        //
+        // success: function (nav) { .... }
       });
 
       $('a.nav').navLink ();
