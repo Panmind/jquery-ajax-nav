@@ -11,7 +11,7 @@ class Demo
     when '/'
       # If the request comes via XHR, don't return the whole index.html page
       #
-      name = 'index.html'
+      name = req.xhr? ? 'index-xhr.html' : 'index.html'
       [200, {'Content-Type' => 'text/html'}, [ asset(name).read ]]
 
     when '/form'
