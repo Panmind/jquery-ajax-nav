@@ -25,10 +25,10 @@ You can also visit [http://panmind.org](http://panmind.org) and navigate
 the [ReS](http://panmind.org/search/res), try out a [search](http://panmind.org/search)
 or [sign up](http://panmind.org/signup) and use the *collaboration tools* to see what
 you can obtain from using these frameworks; have a look as well to
-[http://panmind.org/javascripts/application.js](application.js),
-[http://panmind.org/javascripts/network/globals.js](network/globals.js),
-[http://panmind.org/javascripts/network/res-nav.js](network/res-nav.js) and
-[http://panmind.org/javascripts/project/globals.js](project/globals.js) to
+[application.js](http://panmind.org/javascripts/application.js),
+[network/globals.js](http://panmind.org/javascripts/network/globals.js),
+[network/res-nav.js](http://panmind.org/javascripts/network/res-nav.js) and
+[project/globals.js](http://panmind.org/javascripts/project/globals.js) to
 see how we implemented them in a quite large Rails application.
 
 Core
