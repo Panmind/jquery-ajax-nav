@@ -1,3 +1,7 @@
-
-<h1>Thanks, the form has been submitted and you have been redirected.</h1>
-<p>As you can see, you can navigate back to the previous url.</p>
+<h1>Thanks, the form has been submitted and you have been redirected to this page.</h1>
+<p>As you can see, the URI in the address bar has been updated and you can navigate back
+  to the previously displayed page.</p>
+<p>Moreover, navigating back and forth won't re-issue the POST request, thus preserving
+  idempotence of GET requests.</p>
+<p>This approach is useful e.g. to update a <code>Post</code> on the server and redirect
+  the user to the <code>Post</code> detail page.</p>
