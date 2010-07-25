@@ -611,12 +611,16 @@ var __onHistoryChange = function (path, options) {
       path += (/\?/.test (path) ? '&' : '?') + '_h_=';
   }
 
+  // TODO this code stinks, the .base option sucks: clean up and
+  // refactor it.
+  //
+
   //$.log ('AJAX history: loading "' + path + '"');
 
   $.navLoadContent (window, {
     base     : $.navDefaultOptions.base,
     container: $.navDefaultOptions.container,
-    href     : $.navDefaultOptions.base + path
+    href     : ($.navDefaultOptions.base + path).replace (/\/+/g, '/')
   });
 };
 
