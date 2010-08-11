@@ -408,21 +408,23 @@ $('.deleter').live ('click', function () {
  * <div id="newVideo" class="hidden newElement"> ... </div>
  */
 $('.tabber a').live ('click', function () {
-  var link      = $(this);
-  var tabber    = link.parents ('.tabber');
-  var container = link.attr ('rel');
-  var others    = tabber.attr ('rel');
+  var link = $(this), tab = link.parent ();
+  if (tab.hasClass ('disabled')) return;
+
+  var tabber = link.parents ('.tabber');
+  var target = link.attr ('rel');
+  var others = tabber.attr ('rel');
 
   if (tabber.hasClass ('fader')) {
     $(others).fadeOut ();
-    $(container).fadeIn ();
+    $(target).fadeIn ();
   } else {
     $(others).hide ();
-    $(container).show ();
+    $(target).show ();
   }
 
   tabber.children ().removeClass ('active');
-  link.parent ().addClass ('active');
+  tab.addClass ('active');
 
   return false;
 });
