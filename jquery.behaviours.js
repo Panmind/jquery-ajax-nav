@@ -531,3 +531,11 @@ $('.massCheckboxSelecter').live ('click', function () {
   var selector = $(this).attr('rel');
   $(selector + ':checkbox').check ($(this).attr('checked'));
 });
+
+$('.resetter').live ('click', function () {
+  var element  = $(this);
+  var selector = element.attr ('rel');
+
+  $(selector).val ('').change ();
+  return false;
+});
