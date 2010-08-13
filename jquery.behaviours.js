@@ -533,9 +533,15 @@ $('.massCheckboxSelecter').live ('click', function () {
 });
 
 $('.resetter').live ('click', function () {
-  var element  = $(this);
-  var selector = element.attr ('rel');
+  var element = $(this);
+  var target  = $(element.attr ('rel'));
 
-  $(selector).val ('').change ();
+  if ($.browser.msie && target.is (':file')) {
+    var replacement = $(target[0].outerHTML);
+    target.replaceWith (replacement);
+    replacement.change ();
+  } else {
+    target.val ('').change ();
+  }
   return false;
 });
