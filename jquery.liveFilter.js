@@ -58,13 +58,16 @@ $.fn.liveFilter = function () {
       };
     };
 
-    search.keyup (function () {
+    search.keyup (function (event) {
       if (timer) {
         clearTimeout (timer);
         timer = null;
       }
 
-      var q = $.trim ($(this).val ());
+      if (event.keyCode == $.ui.keyCode.ESCAPE)
+        search.val ('');
+
+      var q = $.trim (search.val ());
       if (!q)
         items.show ();
       else
