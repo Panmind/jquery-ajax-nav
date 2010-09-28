@@ -515,13 +515,13 @@ $.fn.check = function () {
 //
 $('.selecter').live ('click', function () {
   var selector = $(this).attr('rel');
-  $(selector + ':checkbox').check ();
+  $(selector + ':checkbox').check ().trigger ('change');
   return false;
 });
 
 $('.deselecter').live ('click', function () {
   var selector = $(this).attr('rel');
-  $(selector + ':checkbox').check (false);
+  $(selector + ':checkbox').check (false).trigger ('change');
   return false;
 });
 
