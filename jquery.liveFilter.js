@@ -20,6 +20,9 @@
  *
  * Requires the underscore.js library, you can fetch
  * it at http://github.com/documentcloud/underscore/
+ * and the jQuery UI library. Sorry, but if you're
+ * not using those libraries you're missing a lot of
+ * lovely code into your project :-).
  *
  * (C) 2010 Mind2Mind s.r.l, MIT license.
  * Spinned off the http://panmind.org website
