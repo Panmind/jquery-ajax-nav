@@ -47,59 +47,59 @@
  * Author: Marcello Barnaba <marcello.barnaba@gmail.com>
  */
 $.fn.checkBoxMirrorer = function () {
-  if (this.length == 0) return;
+  return this.each (function () {
+    var source = $(this);
+    var target = $(source.attr ('rel'));
+    var boxes  = source.find (':checkbox');
 
-  var source = $(this);
-  var target = $(source.attr ('rel'));
-  var boxes  = source.find (':checkbox');
+    var sync   = function (wrapper, options) {
+      var box = wrapper.find (':checkbox[value=' + options.value + ']');
 
-  var sync   = function (wrapper, options) {
-    var box = wrapper.find (':checkbox[value=' + options.value + ']');
+      if (options.remove)
+        box.parent ().remove ();
+      else
+        box.check (options.flag);
 
-    if (options.remove)
-      box.parent ().remove ();
-    else
-      box.check (options.flag);
+      return box;
+    };
 
-    return box;
-  };
+    var update = function () {
+      var box   = $(this);
+      var label = box.next (); // Sucks but the designer is warned in the HTML
 
-  var update = function () {
-    var box   = $(this);
-    var label = box.next (); // Sucks but the designer is warned in the HTML
+      if (box.is (':checked')) {
+        // Add this to the list of selected ReS
+        //
+        var row = $('<li/>');
 
-    if (box.is (':checked')) {
-      // Add this to the list of selected ReS
-      //
-      var row = $('<li/>');
+        box.clone ().
+          appendTo (row).
+          attr ({name: '', id: 'c' + box.attr ('id')}).
+          change (function () {
+            sync (source, {value: $(this).val (), flag: false})
+              .first ().trigger ('change'); // because we didn't click on this
+            $(this).parent ().remove ();
+            // optimized sync (target, {value: $(this).val (), remove: true})
+            return true;
+          });
 
-      box.clone ().
-        appendTo (row).
-        attr ({name: '', id: 'c' + box.attr ('id')}).
-        change (function () {
-          sync (source, {value: $(this).val (), flag: false})
-            .first ().trigger ('change'); // because we didn't click on this
-          $(this).parent ().remove ();
-          // optimized sync (target, {value: $(this).val (), remove: true})
-          return true;
-        });
+        label.clone ().
+          appendTo (row).
+          attr ('for', 'c' + label.attr ('for'));
 
-      label.clone ().
-        appendTo (row).
-        attr ('for', 'c' + label.attr ('for'));
+        row.appendTo (target);
 
-      row.appendTo (target);
-
-      // Find boxes with same values and check'em
-      //
-      sync (source, {value: box.val (), flag: true});
-    } else {
-      // Remove
-      //
-      sync (source, {value: box.val (), flag: false});
-      sync (target, {value: box.val (), remove: true});
+        // Find boxes with same values and check'em
+        //
+        sync (source, {value: box.val (), flag: true});
+      } else {
+        // Remove
+        //
+        sync (source, {value: box.val (), flag: false});
+        sync (target, {value: box.val (), remove: true});
+      }
     }
-  }
 
-  boxes.change (update);
+    boxes.change (update);
+  });
 };
