@@ -129,8 +129,8 @@
     var form = $(this);
 
     var spinner   = $(options.spinner || '#spinner');
-    var validator = form.validate ($.extend (
-      options.validate || {}, $.validateOptions || {})
+    var validator = form.validate ($.extend ({},
+      $.validateOptions || {}, options.validate || {})
     );
 
     var show_error = function (xhr) {
