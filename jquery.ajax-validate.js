@@ -84,6 +84,9 @@
  *                 its documentation for more information:
  *                 http://docs.jquery.com/Plugins/Validation
  *
+ *  - type:        Request method, passed to jQuery.ajax if present, defaults
+ *                 to "get".
+ *
  *  - params:      Query parameters sent to the server-side checker - It must
  *                 be a callback and it is invoked with "this" set to the jQuery
  *                 object that contains the form DOM object and should return a
@@ -164,7 +167,7 @@
 
       var params = options.params.apply (this);
       $.ajax ({
-        type: 'get',
+        type: options.type || 'get',
         url : form.attr ('pm:check'),
         data: params,
 
