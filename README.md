@@ -3,11 +3,10 @@ jQuery AJAX Navigation framework
 
 (C) 2009-2010 [Mind2Mind s.r.l.](http://mind2mind.is) - Ruby License.
 
-Spinned off from the [panmind.org][panmind] web app.
+Spinned off from the [panmind.org][panmind.org] web app. Check it out!
 
-Tutorial documentation is a work in progress. In the
-meantime, have a look at the reference documentation
-in the source files.
+Tutorial documentation is a work in progress. In the meantime, have a
+look at the reference documentation in source files.
 
 Small demo
 ----------
@@ -40,26 +39,27 @@ Ruby support modules will follow soon.
 Core sources
 ------------
 
-  * [jquery.ajax-nav.js][]      - AJAX navigation framework
-  * [jquery.history.js][]       - AJAX history management
-  * [jquery.location.js][]      - Document location/anchors management
+  * [jquery.ajax-nav.js][]         - AJAX navigation framework
+  * [jquery.history.js][]          - AJAX history management
+  * [jquery.location.js][]         - Document location/anchors management
 
 Extras
 ------
 
-  * [jquery.ajax-validate.js][] - AJAX validation plugin
-  * [jquery.behaviours.js][]    - Generic behaviours library
-  * [jquery.dim-opaque.js][]    - Helpers to disable parts of the UI
-  * [jquery.poller.js][]        - A poller that uses `{set,clear}Interval`
-  * [jquery.queue.js][]         - A queue, `FIFO` or `LIFO`
-  * [jquery.diffhtml.js][]      - An HTML diff routine based on `DOMParser`
-  * [jquery.utilities.js][]     - Small `$.log` and `$.clone` helpers
+  * [jquery.ajax-validate.js][]    - AJAX validation plugin
+  * [jquery.behaviours.js][]       - Generic behaviours library
+  * [jquery.dim-opaque.js][]       - Helpers to disable parts of the UI
+  * [jquery.poller.js][]           - A poller that uses `{set,clear}Interval`
+  * [jquery.queue.js][]            - A queue, `FIFO` or `LIFO`
+  * [jquery.diffhtml.js][]         - An HTML diff routine based on `DOMParser`
+  * [jquery.utilities.js][]        - Small `$.log` and `$.clone` helpers
+  * [jquery.checkBoxMirrorer.js][] - Ever wanted to mirror checkboxes? :)
 
 Support libraries
 -----------------
 
-  * [vendor/jsdifflib.js][]     - Javascript Diff Library
-  * [jQuery 1.4.2][jquery]      - Please see [vendor/jquery-IE-xhr-abort.patch][jquery-patch]
+  * [vendor/jsdifflib.js][]        - Javascript Diff Library
+  * [jQuery 1.4.2][jquery]         - Please see [vendor/jquery-IE-xhr-abort.patch][jquery-patch]
 
 Authors
 -------
@@ -70,31 +70,31 @@ Authors
   * Exelab Karma      ([@exelab](http://twitter.com/exelab)) <exelab@exelab.eu>
 
 
-  `- vjt  Sun Jul 25 17:45:51 CEST 2010`
+  `- vjt  Fri Oct 29 12:49:27 CEST 2010`
 
+[panmind]:                    http://panmind.org
+[sign up]:                    http://panmind.org/signup
+[search]:                     http://panmind.org/search
+[ReS]:                        http://panmind.org/search/res
+[collaboration tools]:        http://panmind.org/tour/collaborate
 
-[panmind]:                 http://panmind.org
-[sign up]:                 http://panmind.org/signup
-[search]:                  http://panmind.org/search
-[ReS]:                     http://panmind.org/search/res
-[collaboration tools]:     http://panmind.org/tour/collaborate
+[jquery.ajax-nav.js]:         http://github.com/Panmind/jquery-ajax-nav/blob/master/jquery.ajax-nav.js
+[jquery.history.js]:          http://github.com/Panmind/jquery-ajax-nav/blob/master/jquery.history.js
+[jquery.location.js]:         http://github.com/Panmind/jquery-ajax-nav/blob/master/jquery.location.js
+[jquery.ajax-validate.js]:    http://github.com/Panmind/jquery-ajax-nav/blob/master/jquery.ajax-validate.js
+[jquery.behaviours.js]:       http://github.com/Panmind/jquery-ajax-nav/blob/master/jquery.behaviours.js
+[jquery.dim-opaque.js]:       http://github.com/Panmind/jquery-ajax-nav/blob/master/jquery.dim-opaque.js
+[jquery.poller.js]:           http://github.com/Panmind/jquery-ajax-nav/blob/master/jquery.poller.js
+[jquery.queue.js]:            http://github.com/Panmind/jquery-ajax-nav/blob/master/jquery.queue.js
+[jquery.diffhtml.js]:         http://github.com/Panmind/jquery-ajax-nav/blob/master/jquery.diffhtml.js
+[jquery.utilities.js]:        http://github.com/Panmind/jquery-ajax-nav/blob/master/jquery.utilities.js
+[jquery.checkBoxMirrorer.js]: http://github.com/Panmind/jquery-ajax-nav/blob/master/jquery.checkBoxMirrorer.js
 
-[jquery.ajax-nav.js]:      http://github.com/Panmind/jquery-ajax-nav/blob/master/jquery.ajax-nav.js
-[jquery.history.js]:       http://github.com/Panmind/jquery-ajax-nav/blob/master/jquery.history.js
-[jquery.location.js]:      http://github.com/Panmind/jquery-ajax-nav/blob/master/jquery.location.js
-[jquery.ajax-validate.js]: http://github.com/Panmind/jquery-ajax-nav/blob/master/jquery.ajax-validate.js
-[jquery.behaviours.js]:    http://github.com/Panmind/jquery-ajax-nav/blob/master/jquery.behaviours.js
-[jquery.dim-opaque.js]:    http://github.com/Panmind/jquery-ajax-nav/blob/master/jquery.dim-opaque.js
-[jquery.poller.js]:        http://github.com/Panmind/jquery-ajax-nav/blob/master/jquery.poller.js
-[jquery.queue.js]:         http://github.com/Panmind/jquery-ajax-nav/blob/master/jquery.queue.js
-[jquery.diffhtml.js]:      http://github.com/Panmind/jquery-ajax-nav/blob/master/jquery.diffhtml.js
-[jquery.utilities.js]:     http://github.com/Panmind/jquery-ajax-nav/blob/master/jquery.utilities.js
+[vendor/jsdifflib.js]:        http://github.com/Panmind/jquery-ajax-nav/blob/master/vendor/jsdifflib.js
+[jquery-patch]:               http://github.com/Panmind/jquery-ajax-nav/blob/master/vendor/jquery-IE-xhr-abort.patch
+[jquery]:                     http://jquery.com
 
-[vendor/jsdifflib.js]:     http://github.com/Panmind/jquery-ajax-nav/blob/master/vendor/jsdifflib.js
-[jquery-patch]:            http://github.com/Panmind/jquery-ajax-nav/blob/master/vendor/jquery-IE-xhr-abort.patch
-[jquery]:                  http://jquery.com
-
-[application.js]:          http://panmind.org/javascripts/application.js
-[network/globals.js]:      http://panmind.org/javascripts/network/globals.js
-[network/res-nav.js]:      http://panmind.org/javascripts/network/res-nav.js
+[application.js]:             http://panmind.org/javascripts/application.js
+[network/globals.js]:         http://panmind.org/javascripts/network/globals.js
+[network/res-nav.js]:         http://panmind.org/javascripts/network/res-nav.js
 [projects/globals.js]:     http://panmind.org/javascripts/projects/globals.js
